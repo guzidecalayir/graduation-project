@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 import { NavigationContainer} from "@react-navigation/native";
 import {createStackNavigator} from "@react-navigation/stack";
-import profile_philanthropist from './model/model/philanthropist';
+import PhilanthropistView from "./view/PhilanthropistView";
 
 const Stack = createStackNavigator();
 
@@ -11,7 +11,7 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen name = "Profile Philianthropist" component ={profile_philanthropist}/>
+        <Stack.Screen name = "Profile Philianthropist" component ={PhilanthropistView}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
