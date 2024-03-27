@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import philanthropist from '../service/api_philanthropist'; 
+import {getPhilanthropist} from '../service/api_philanthropist'; 
 
-const ProfilePhilanthropist = () => {
+const ProfilePhilanthropist = ({navigation}) => {
   const [philanthropists, setPhilanthropists] = useState([]);
 
   useEffect(() => {
     async function fetchPhilanthropistData() {
       try {
-        const data = await philanthropist.fetchPhilanthropistData();
+        const data = await getPhilanthropist();
         setPhilanthropists(data);
       } catch (error) {
         console.error('Error fetching philanthropist data:', error);
