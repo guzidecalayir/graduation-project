@@ -1,4 +1,4 @@
-class api_philanthropist{
+class apiPhilanthropist{
     static async getPhilanthropist(){
         try{
             const response = await fetch('https://studentdesk.azurewebsites.net/api/Philanthropist');
@@ -10,4 +10,4 @@ class api_philanthropist{
     }
 }
 
-export default api_philanthropist;
+export default apiPhilanthropist;

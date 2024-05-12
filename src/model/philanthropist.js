@@ -1,4 +1,4 @@
-class Philanthropist {
+class philanthropist {
     constructor (id, firstName, lastName, e_mail, password, phoneNumber){
         this.id = id;
         this.firstName = firstName;
@@ -22,7 +22,7 @@ class Philanthropist {
 
     // Method to clone the object
     clone() {
-        return new Philanthropist(
+        return new philanthropist(
             this.id,
             this.firstName,
             this.lastName,
@@ -33,4 +33,4 @@ class Philanthropist {
     }
 }
 
-export default Philanthropist;
+export default philanthropist;

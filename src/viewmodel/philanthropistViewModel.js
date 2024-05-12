@@ -1,15 +1,15 @@
-import api_philanthropist from "../service/api_philanthropist";
-import Philanthropist from "../model/model/Philanthropist";
+import apiPhilanthropist from "../service/apiPhilanthropist";
+import philanthropist from "../model/philanthropist";
 
-class PhilanthropistViewModel {
+class philanthropistViewModel {
     static async getPhilanthropists() {
         try {
             // Fetch philanthropist data from the API
-            const philanthropistData = await api_philanthropist.getPhilanthropist();
+            const philanthropistData = await apiPhilanthropist.getPhilanthropist();
 
             // Map the fetched data to Philanthropist instances
             const philanthropists = philanthropistData.map(data => {
-                return new Philanthropist(
+                return new philanthropist(
                     data.id,
                     data.firstName,
                     data.lastName,
@@ -19,7 +19,7 @@ class PhilanthropistViewModel {
                 );
             });
 
-            return philanthropists;
+            return philanthropist;
         } catch (error) {
             console.error('Error fetching philanthropists:', error);
             throw error;
@@ -27,4 +27,4 @@ class PhilanthropistViewModel {
     }
 }
 
-export default PhilanthropistViewModel;
+export default philanthropistViewModel;
