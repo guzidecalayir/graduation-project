@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, Alert, StyleSheet, TouchableOpacity} from 'react-native';
+import { View, Text, TextInput, Button, Alert, StyleSheet, TouchableOpacity } from 'react-native';
 
-const SignInViewStudent = ({navigation}) => {
+const SignInViewPhilanthropist = ({navigation}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -9,7 +9,7 @@ const SignInViewStudent = ({navigation}) => {
     try {
       // Implement your authentication logic here
       // For demonstration purposes, let's assume authentication is successful if the email and password match a hardcoded value
-      const hardcodedEmail = 'student@example.com';
+      const hardcodedEmail = 'philanthropist@example.com';
       const hardcodedPassword = 'password';
       
       if (email === hardcodedEmail && password === hardcodedPassword) {
@@ -27,7 +27,7 @@ const SignInViewStudent = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Giriş Yap Öğrenci</Text>
+      <Text style={styles.title}>Giriş Yap Yardımsever</Text>
       <TextInput
         style={styles.input}
         placeholder="Email"
@@ -42,11 +42,9 @@ const SignInViewStudent = ({navigation}) => {
         onChangeText={(text) => setPassword(text)}
         secureTextEntry={true}
       />
-      <View style={styles.buttonContainer}>
-        <Button title="Giriş Yap" onPress={handleSignIn} />
-      </View>
+      <Button title="Giriş" onPress={handleSignIn} />
       <View style={styles.buttonsContainer}>
-      <TouchableOpacity onPress={() => navigation.navigate('Sign Up Student')}>
+      <TouchableOpacity onPress={() => navigation.navigate('Sign Up Philanthropist')}>
         <Text style={styles.loginText}>Hesabın yok mu? Kayıt Ol</Text>
       </TouchableOpacity>
       </View>
@@ -74,24 +72,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     marginBottom: 10,
   },
- 
-  buttonContainer: {
-    borderColor: '#ccc',
-    borderWidth: 1,
-    borderRadius: 5,
-    padding: 5,
-},
-buttonsContainer: {
-  flexDirection: 'row',
-  justifyContent: 'space-around', // Butonları yatay olarak ortalamak için space-around kullanıyoruz
-  width: '100%',
-  marginTop: 20,
-},
-loginText: {
+  buttonsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around', // Butonları yatay olarak ortalamak için space-around kullanıyoruz
+    width: '100%',
     marginTop: 20,
-    color: 'blue',
-    textDecorationLine: 'underline',
-},
+  },
+  loginText: {
+      marginTop: 20,
+      color: 'blue',
+      textDecorationLine: 'underline',
+  },
 });
 
-export default SignInViewStudent;
+export default SignInViewPhilanthropist;

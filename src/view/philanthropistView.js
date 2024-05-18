@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {FlatList, StyleSheet, Text, View} from 'react-native';
-import philanthropistViewModel from  "../viewmodel/philanthropistViewModel";
+import PhilanthropistViewModel from  "../viewmodel/PhilanthropistViewModel";
 
 const PhilanthropistView = () => {
   const [philanthropists, setPhilanthropists] = useState([]);

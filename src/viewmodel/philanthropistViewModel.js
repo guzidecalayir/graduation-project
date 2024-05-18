@@ -1,7 +1,7 @@
 import apiPhilanthropist from "../service/apiPhilanthropist";
-import philanthropist from "../model/philanthropist";
+import Philanthropist from "../model/Philanthropist";
 
-class philanthropistViewModel {
+class PhilanthropistViewModel {
     static async getPhilanthropists() {
         try {
             // Fetch philanthropist data from the API
@@ -27,4 +27,4 @@ class philanthropistViewModel {
     }
 }
 
-export default philanthropistViewModel;
+export default PhilanthropistViewModel;
