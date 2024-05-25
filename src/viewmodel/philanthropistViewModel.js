@@ -9,17 +9,19 @@ class PhilanthropistViewModel {
 
             // Map the fetched data to Philanthropist instances
             const philanthropists = philanthropistData.map(data => {
-                return new philanthropist(
+                return new Philanthropist(
                     data.id,
                     data.firstName,
                     data.lastName,
                     data.e_mail,
                     data.password,
-                    data.phoneNumber
+                    data.phoneNumber,
+                    data.salt,
+                    data.totalDonation
                 );
             });
 
-            return philanthropist;
+            return Philanthropist;
         } catch (error) {
             console.error('Error fetching philanthropists:', error);
             throw error;

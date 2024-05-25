@@ -54,6 +54,7 @@ const SignUpViewPhilanthropist = ({navigation}) => {
     setIsTermsChecked(false);
 
     Alert.alert('Başarılı', 'Kayıt olma işlemi başarılı.');
+    navigation.navigate('Profile Philanthropist');
   };
 
   const handleCancel = () => {
@@ -138,7 +139,7 @@ return (
       
       <View style={styles.buttonsContainer}>
         <View style={styles.buttonContainer}>
-          <Button title="Kayıt Ol" onPress={handleSignUp} />
+          <Button title="Kayıt Ol" onPress={handleSignUp} color="blue" />
         </View>
         <View style={styles.buttonContainer}>
           <Button title="Vazgeç" onPress={handleCancel} color="gray" />

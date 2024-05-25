@@ -42,7 +42,11 @@ const SignInViewRestaurant = ({navigation}) => {
         onChangeText={(text) => setPassword(text)}
         secureTextEntry={true}
       />
-      <Button title="Giriş" onPress={handleSignIn} />
+      <View style={styles.buttonsContainer}>
+        <TouchableOpacity onPress={handleSignIn} style={styles.buttonContainer}>
+          <Text style={styles.buttonText}>Giriş</Text>
+        </TouchableOpacity>
+      </View>
       <View style={styles.buttonsContainer}>
       <TouchableOpacity onPress={() => navigation.navigate('Sign Up Restaurant')}>
         <Text style={styles.loginText}>Hesabın yok mu? Kayıt Ol</Text>
@@ -77,6 +81,16 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around', // Butonları yatay olarak ortalamak için space-around kullanıyoruz
     width: '100%',
     marginTop: 20,
+  },
+  buttonContainer: {
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderRadius: 5,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+  },
+  buttonText: {
+    color: 'blue', // Buton metninin rengini beyaz yapmak için color özelliğini ekledim
   },
   loginText: {
       marginTop: 20,
