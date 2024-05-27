@@ -1,9 +1,10 @@
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
 import React from 'react';
 
 const SignUpView = ({ navigation }) => {
   return (
     <View style={styles.container}>
+      <Image source={require('../assets/logo.jpeg')} style={styles.logo} />
       <TouchableOpacity
         style={styles.button}
         onPress={() => navigation.navigate('Sign Up Student')}
@@ -56,5 +57,11 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     textAlign: 'center',
+  },
+  logo: {
+    width: 200, // Adjust the width here
+    height: 200,
+    aspectRatio: 1,
+    marginBottom: 30,
   },
 });

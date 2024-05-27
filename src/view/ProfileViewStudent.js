@@ -5,13 +5,14 @@ import { launchImageLibrary } from 'react-native-image-picker';
 const ProfileViewStudent = ({ navigation }) => {
   const [name, setName] = useState('');
   const [surname, setSurname] = useState('');
+  const [university, setUniversity] = useState('');
   const [email, setEmail] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [isEditing, setIsEditing] = useState(false);
   const [photo, setPhoto] = useState(null);
 
   const handleSave = () => {
-    Alert.alert('Başarılı', 'Profil başarıyla güncellendi.');
+    Alert.alert('Başarılı', 'Profil güncellendi.');
     setIsEditing(false);
   };
 
@@ -57,7 +58,7 @@ const ProfileViewStudent = ({ navigation }) => {
             style={[styles.input, !isEditing && styles.disabledInput]}
             value={name}
             editable={isEditing}
-            onChangeText={(text) => setName(text)}
+            onChangeText={setName}
           />
         </View>
 
@@ -67,7 +68,17 @@ const ProfileViewStudent = ({ navigation }) => {
             style={[styles.input, !isEditing && styles.disabledInput]}
             value={surname}
             editable={isEditing}
-            onChangeText={(text) => setSurname(text)}
+            onChangeText={setSurname}
+          />
+        </View>
+
+        <View style={styles.fieldContainer}>
+          <Text style={styles.label}>Üniversite</Text>
+          <TextInput
+            style={[styles.input, !isEditing && styles.disabledInput]}
+            value={university}
+            editable={isEditing}
+            onChangeText={setUniversity}
           />
         </View>
 
@@ -77,7 +88,7 @@ const ProfileViewStudent = ({ navigation }) => {
             style={[styles.input, !isEditing && styles.disabledInput]}
             value={email}
             editable={isEditing}
-            onChangeText={(text) => setEmail(text)}
+            onChangeText={setEmail}
             keyboardType="email-address"
           />
         </View>
@@ -88,7 +99,7 @@ const ProfileViewStudent = ({ navigation }) => {
             style={[styles.input, !isEditing && styles.disabledInput]}
             value={phoneNumber}
             editable={isEditing}
-            onChangeText={(text) => setPhoneNumber(text)}
+            onChangeText={setPhoneNumber}
             keyboardType="numeric"
           />
         </View>
@@ -168,16 +179,6 @@ const styles = StyleSheet.create({
   buttonContainer: {
     width: '45%',
   },
-  photoContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 5,
-    width: 100,
-    height: 100,
-    marginBottom: 10,
-  },
   photoBorder: {
     borderColor: '#000',
   },
@@ -188,6 +189,16 @@ const styles = StyleSheet.create({
   },
   noPhotoText: {
     color: '#999',
+  },
+  photoContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 5,
+    width: 100,
+    height: 100,
+    marginBottom: 10,
   },
 });
 

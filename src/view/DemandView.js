@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TextInput, Button, ScrollView, FlatList } from 'react-native'
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, ScrollView, FlatList, Alert } from 'react-native'
 import React, { useState } from 'react'
 import { Picker } from '@react-native-picker/picker'
 
@@ -12,13 +12,19 @@ const DemandView = () => {
   const [demands, setDemands] = useState([])
 
   const handleSubmit = () => {
+    // Alanların dolu olup olmadığını kontrol edin
+    if (!name || !email || !phone || !category || !subject || !description) {
+      Alert.alert('Hata', 'Lütfen tüm alanları doldurunuz.')
+      return
+    }
+
     const newDemand = {
       id: (demands.length + 1).toString(),
       title: subject,
       status: 'Beklemede'
     }
     setDemands([...demands, newDemand])
-    // Clear the form
+    // Formu temizle
     setName('')
     setEmail('')
     setPhone('')
@@ -29,83 +35,79 @@ const DemandView = () => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.header}>Talep Gönder</Text>
-      
-      <TextInput
-        style={styles.input}
-        placeholder="Ad Soyad"
-        value={name}
-        onChangeText={setName}
-      />
-      
-      <TextInput
-        style={styles.input}
-        placeholder="E-posta Adresi"
-        keyboardType="email-address"
-        value={email}
-        onChangeText={setEmail}
-      />
-      
-      <TextInput
-        style={styles.input}
-        placeholder="Telefon Numarası"
-        keyboardType="phone-pad"
-        value={phone}
-        onChangeText={setPhone}
-      />
-      
-      <Text style={styles.label}>Talep Kategorisi</Text>
-      <View style={styles.pickerContainer}>
-        <Picker
-          selectedValue={category}
-          onValueChange={(itemValue) => setCategory(itemValue)}
-        >
-          <Picker.Item label="Öneri" value="Öneri" />
-          <Picker.Item label="Şikayet" value="Şikayet" />
-          <Picker.Item label="Destek" value="Destek" />
-          <Picker.Item label="Diğer" value="Diğer" />
-        </Picker>
-      </View>
-
-      <Text style={styles.label}>Talep Konusu</Text>
-      <View style={styles.pickerContainer}>
-        <Picker
-          selectedValue={subject}
-          onValueChange={(itemValue) => setSubject(itemValue)}
-        >
-          <Picker.Item label="Ürün/Hizmet" value="Ürün/Hizmet" />
-          <Picker.Item label="Teknik Sorun" value="Teknik Sorun" />
-          <Picker.Item label="Hesap Sorunu" value="Hesap Sorunu" />
-          <Picker.Item label="Diğer" value="Diğer" />
-        </Picker>
-      </View>
-      
-      <TextInput
-        style={[styles.input, styles.textArea]}
-        placeholder="Talep Açıklaması"
-        multiline
-        numberOfLines={4}
-        value={description}
-        onChangeText={setDescription}
-      />
-
-      <Button title="Gönder" onPress={handleSubmit} />
-
-      <Text style={styles.header}>Önceki Taleplerim</Text>
-      {demands.length === 0 ? (
-        <Text style={styles.noDemandsText}>Henüz talebiniz yok</Text>
-      ) : (
-        <FlatList
-          data={demands}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
-            <View style={styles.demandItem}>
-              <Text style={styles.demandTitle}>{item.title}</Text>
-              <Text style={styles.demandStatus}>{item.status}</Text>
-            </View>
-          )}
+      <View style={styles.view}>
+        <Text style={styles.header}>Talep Gönder</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Ad Soyad"
+          value={name}
+          onChangeText={setName}
         />
-      )}
+        <TextInput
+          style={styles.input}
+          placeholder="E-posta Adresi"
+          keyboardType="email-address"
+          value={email}
+          onChangeText={setEmail}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Telefon Numarası"
+          keyboardType="phone-pad"
+          value={phone}
+          onChangeText={setPhone}
+        />
+        <Text style={styles.label}>Talep Kategorisi</Text>
+        <View style={styles.pickerContainer}>
+          <Picker
+            selectedValue={category}
+            onValueChange={(itemValue) => setCategory(itemValue)}
+          >
+            <Picker.Item label="Öneri" value="Öneri" />
+            <Picker.Item label="Şikayet" value="Şikayet" />
+            <Picker.Item label="Destek" value="Destek" />
+            <Picker.Item label="Diğer" value="Diğer" />
+          </Picker>
+        </View>
+        <Text style={styles.label}>Talep Konusu</Text>
+        <View style={styles.pickerContainer}>
+          <Picker
+            selectedValue={subject}
+            onValueChange={(itemValue) => setSubject(itemValue)}
+          >
+            <Picker.Item label="Ürün/Hizmet" value="Ürün/Hizmet" />
+            <Picker.Item label="Teknik Sorun" value="Teknik Sorun" />
+            <Picker.Item label="Hesap Sorunu" value="Hesap Sorunu" />
+            <Picker.Item label="Diğer" value="Diğer" />
+          </Picker>
+        </View>
+        <TextInput
+          style={[styles.input, styles.textArea]}
+          placeholder="Talep Açıklaması"
+          multiline
+          numberOfLines={4}
+          value={description}
+          onChangeText={setDescription}
+        />
+        <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+          <Text style={styles.buttonText}>Gönder</Text>
+        </TouchableOpacity>
+        <Text style={styles.header}>Önceki Taleplerim</Text>
+        {demands.length === 0 ? (
+          <Text style={styles.noDemandsText}>Henüz talebiniz yok</Text>
+        ) : (
+          <FlatList
+            data={demands}
+            keyExtractor={(item) => item.id}
+            renderItem={({ item }) => (
+              <View style={styles.demandItem}>
+                <Text style={styles.demandTitle}>{item.title}</Text>
+                <Text style={styles.demandStatus}>{item.status}</Text>
+              </View>
+            )}
+          />
+        )}
+      </View>
     </ScrollView>
   )
 }
@@ -115,7 +117,8 @@ export default DemandView
 const styles = StyleSheet.create({
   container: {
     padding: 20,
-    backgroundColor: '#fff'
+    backgroundColor: '#fff',
+    flexGrow: 1,
   },
   header: {
     fontSize: 24,
@@ -164,5 +167,20 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: 'gray',
     marginTop: 10
+  },
+  button: {
+    backgroundColor: '#007bff',
+    padding: 10,
+    borderRadius: 5,
+    alignItems: 'center',
+    marginBottom: 15,
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  view: {
+    flex: 1,
   }
 })

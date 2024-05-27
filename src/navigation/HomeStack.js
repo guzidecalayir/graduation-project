@@ -1,17 +1,22 @@
 import * as React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import HomeScreenView from '../view/HomeScreenView';
+
+import BottomTabNavigator from './BottomTabNavigator';
+import RestaurantView from '../view/RestaurantView';
 
 
-const Stack = createStackNavigator();
+
+
+
+const homeStack = createStackNavigator();
 
 function HomeStack() {
   return (
    
-      <Stack.Navigator>
-        <Stack.Screen name="Home" component={HomeScreenView} options={{ headerShown: false }} />
-      </Stack.Navigator>
+      <homeStack.Navigator initialRouteName='Bottom'>
+        <homeStack.Screen name="Geri" component={BottomTabNavigator} options={{ headerShown: false, headerTitle: null }} />
+        <homeStack.Screen name="Restaurant" component={RestaurantView} options={{ headerShown: true}} />
+      </homeStack.Navigator>
     
   );
 }

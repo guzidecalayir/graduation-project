@@ -3,9 +3,11 @@ class Philanthropist {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.e_mail = e_mail;
+        this.email = email;
         this.password = password;
         this.phoneNumber = phoneNumber;
+        this.salt = salt;
+        this.totalDonation = totalDonation;
     }
 
     // Method to convert the object to a plain JavaScript object
@@ -14,9 +16,12 @@ class Philanthropist {
             id: this.id,
             firstName: this.firstName,
             lastName: this.lastName,
-            e_mail: this.e_mail,
+            email: this.email,
             password: this.password,
-            phoneNumber: this.phoneNumber
+            phoneNumber: this.phoneNumber,
+            salt: this.salt,
+            totalDonation: this.totalDonation
+
         };
     }
 
@@ -28,7 +33,9 @@ class Philanthropist {
             this.lastName,
             this.e_mail,
             this.password,
-            this.phoneNumber
+            this.phoneNumber,
+            this.salt,
+            this.totalDonation
         );
     }
 }

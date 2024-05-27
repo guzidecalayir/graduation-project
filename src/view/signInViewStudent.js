@@ -46,10 +46,13 @@ const SignInViewStudent = ({ navigation }) => {
           <Text style={styles.buttonText}>Giriş</Text>
         </TouchableOpacity>
       </View>
-      <View style={styles.buttonsContainer}>
+      <View style={styles.buttonContainer2}>
         <TouchableOpacity onPress={() => navigation.navigate('Sign Up Student')}>
-          <Text style={styles.loginText}>Hesabın yok mu? Kayıt Ol</Text>
+          <Text style={styles.loginText}>Hesabın yok mu? Kayıt Ol!</Text>
         </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('Forgot My Password')}>
+        <Text style={styles.loginText}>Şifremi Unuttum</Text>
+      </TouchableOpacity>
       </View>
     </View>
   );
@@ -61,12 +64,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 20,
-    backgroundColor: '#f0f0f5',
   },
   title: {
     fontSize: 24,
     marginBottom: 20,
-    fontWeight: 'bold',
   },
   input: {
     width: '100%',
@@ -76,22 +77,11 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     paddingHorizontal: 10,
     marginBottom: 10,
-    backgroundColor: '#fff',
-  },
-  buttonContainer: {
-    width: '100%',
-    borderRadius: 5,
-    marginTop: 10,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
   },
   buttonsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around', // Butonları yatay olarak ortalamak için space-around kullanıyoruz
+    width: '100%',
     marginTop: 20,
   },
   buttonContainer: {
@@ -100,15 +90,26 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     paddingVertical: 10,
     paddingHorizontal: 20,
+    flexDirection: 'column',
+    margin:10,
+  },
+  buttonContainer2:{
+    paddingVertical: 10,
+    paddingHorizontal: 10,
+    flexDirection: 'column',
+    margin:10,
+    alignItems:'center'
   },
   buttonText: {
     color: 'blue', // Buton metninin rengini beyaz yapmak için color özelliğini ekledim
   },
   loginText: {
-    color: 'blue',
-    textDecorationLine: 'underline',
-    textAlign: 'center',
+      marginTop: 10,
+      marginBottom:10,
+      color: 'blue',
+      textDecorationLine: 'underline',
   },
 });
+
 
 export default SignInViewStudent;

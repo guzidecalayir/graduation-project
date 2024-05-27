@@ -1,7 +1,10 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ImageBackground, ScrollView } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, ImageBackground, ScrollView, TextInput } from 'react-native';
+import { AntDesign } from '@expo/vector-icons';
+import RestaurantView from './RestaurantView';
 
 const HomeScreenView = ({ navigation }) => {
+  const [searchQuery, setSearchQuery] = useState('');
 
   const foodCategories = [
     { id: 1, title: 'Ev Yemekleri', image: require('../assets/ev_yemekleri.png') },
@@ -15,12 +18,15 @@ const HomeScreenView = ({ navigation }) => {
     { id: 9, title: 'Kahvaltı', image: require('../assets/kahvalti.png') },
   ];
 
-  // Render each food category
+  const filteredCategories = foodCategories.filter(category =>
+    category.title.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   const renderFoodCategory = (category) => (
     <TouchableOpacity
       key={category.id}
       style={styles.categoryContainer}
-      onPress={() => navigation.navigate('Category', { category })}
+      onPress={() => navigation.navigate('Restaurant', { RestaurantView })}
     >
       <ImageBackground source={category.image} style={styles.categoryImage}>
         <Text style={styles.categoryTitle}>{category.title}</Text>
@@ -30,11 +36,22 @@ const HomeScreenView = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Hoş Geldiniz!</Text>
-      <Text style={styles.subtitle}>Leziz Kategorileri Keşfedin!</Text>
+      <View style={styles.searchBarContainer}>
+      <AntDesign name="search1" size={24} color="black" />
+        <TextInput
+          style={styles.searchBar}
+          placeholder="Restoran Konumu Bul"
+          value={searchQuery}
+          onChangeText={setSearchQuery}
+        />
+      </View>
+      <View style={styles.welcomeContainer}>
+        <Text style={styles.title}>Hoş Geldiniz!</Text>
+        <Text style={styles.subtitle}>Leziz Kategorileri Keşfedin!</Text>
+      </View>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.categoriesContainer}>
-          {foodCategories.map((category) => renderFoodCategory(category))}
+          {filteredCategories.map((category) => renderFoodCategory(category))}
         </View>
       </ScrollView>
     </View>
@@ -46,18 +63,44 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#ffffff',
     paddingHorizontal: 20,
-    paddingTop: 50,
+    paddingTop: 20,
+  },
+  searchBarContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderColor: '#ddd',
+    borderWidth: 1,
+    borderRadius: 10,
+    marginBottom: 20,
+    paddingHorizontal: 10,
+  },
+  searchIcon: {
+    marginRight: 10,
+  },
+  searchBar: {
+    flex: 1,
+    height: 40,
+    marginLeft:10,
+  },
+  welcomeContainer: {
+    borderWidth: 1,
+    borderColor: '#ddd',
+    borderRadius: 10,
+    padding: 10,
+    marginBottom: 15,
+    backgroundColor: '#f9f9f9',
   },
   title: {
-    fontSize: 28,
+    fontSize: 18,
     fontWeight: 'bold',
-    marginBottom: 10,
+    marginBottom: 5,
     textAlign: 'center',
+    color: '#333',
   },
   subtitle: {
-    fontSize: 18,
-    marginBottom: 20,
+    fontSize: 14,
     textAlign: 'center',
+    color: '#666',
   },
   scrollContainer: {
     flexGrow: 1,
@@ -93,6 +136,5 @@ const styles = StyleSheet.create({
     width: '100%',
   },
 });
-
 
 export default HomeScreenView;
