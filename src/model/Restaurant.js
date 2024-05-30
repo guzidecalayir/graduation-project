@@ -1,13 +1,10 @@
 class Restaurant {
 
-    constructor (name, city, district, neighbourhood, street, building, email, password){
+    constructor (name, longitude, latitude, email, password){
         
         this.name = name;
-        this.city = city;
-        this.district = district;
-        this.neighbourhood = neighbourhood;
-        this.street = street;
-        this.building = building;
+        this.longitude = longitude;
+        this.latitude = latitude;
         this.email = email;
         this.password = password;
         
@@ -18,11 +15,8 @@ class Restaurant {
         return {
             
             name: this.name,
-            city : this.city,
-            district : this.district,
-            neighbourhood : this.neighbourhood,
-            street : this.street,
-            building : this.building,
+            longitude : this.cilongitudety,
+            latitude : this.latitude,
             email: this.email,
             password: this.password,
             
@@ -34,11 +28,8 @@ class Restaurant {
     clone() {
         return new Restaurant(
             this.name,
-            this.city,
-            this.district,
-            this.neighbourhood,
-            this.street,
-            this.building,
+            this.longitude,
+            this.latitude,
             this.email,
             this.password,
             

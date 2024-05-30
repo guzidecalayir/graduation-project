@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, Alert, StyleSheet, Switch, TouchableOpacity, ScrollView} from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
-
+import StudentViewModel from '../viewmodel/StudentViewModel';
 
 const SignUpViewStudent = ({navigation}) => {
   const [name, setName] = useState('');
@@ -31,9 +31,9 @@ const SignUpViewStudent = ({navigation}) => {
       return;
     }else{
       const studentData = {
-         name:name,
-         surname: surname,
-         birthDate: birthDate,
+         firstName:name,
+         lastName: surname,
+         birthDate: birthDate.toISOString().split('T')[0],
          school: university,
          phoneNumber: phoneNumber,
          email:email,
@@ -41,19 +41,21 @@ const SignUpViewStudent = ({navigation}) => {
       };
        console.log(studentData);
        StudentViewModel.mapStudentData(studentData);
+
+       setName('');
+       setSurname('');
+       setSelectedDate(new Date());
+       setUniName('');
+       setPhoneNumber('');
+       setEmail('');
+       setPassword('');
+       setIsPolicyChecked(false);
+       setIsTermsChecked(false);
    }
 
     
 
-    setName('');
-    setSurname('');
-    setSelectedDate(new Date());
-    setUniName('');
-    setPhoneNumber('');
-    setEmail('');
-    setPassword('');
-    setIsPolicyChecked(false);
-    setIsTermsChecked(false);
+   
   };
 
   const handleCancel = () => {

@@ -39,18 +39,19 @@ const SignUpViewPhilanthropist = ({navigation}) => {
        };
         console.log(philanthropistData);
         PhilanthropistViewModel.mapPhilanthropistData(philanthropistData);
+        setName('');
+        setSurname('');
+        setEmail('');
+        setPassword('');
+        setConfirmPassword('');
+        setPhoneNumber('');
+        setIsPolicyChecked(false);
+        setIsTermsChecked(false);
+
     }
 
     
-    setName('');
-    setSurname('');
-    setEmail('');
-    setPassword('');
-    setConfirmPassword('');
-    setPhoneNumber('');
-    setIsPolicyChecked(false);
-    setIsTermsChecked(false);
-
+    
     
   };
 

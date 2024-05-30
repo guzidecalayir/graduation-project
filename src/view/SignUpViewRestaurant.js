@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, Alert, StyleSheet, Switch, TouchableOpacity, ScrollView} from 'react-native';
+import RestaurantViewModel from '../viewmodel/RestaurantViewModel';
+import apiMaps from '../service/apiMaps';
 
 
 const SignUpViewRestaurant = ({navigation}) => {
@@ -15,8 +17,14 @@ const SignUpViewRestaurant = ({navigation}) => {
   const [isPolicyChecked, setIsPolicyChecked] = useState(false);
   const [isTermsChecked, setIsTermsChecked] = useState(false);
 
+  
  
-  const handleSignUp = () => {
+  const handleSignUp = async () => {
+
+    const address = `No:${building} Sokak:${street}, Mahalle:${neighbourhood}, İlçe:${district}, İl:${city}`;
+    console.log(address);
+    const location = await apiMaps.getCoordinates(address);
+    
     if (!name || !city || !district|| !neighbourhood|| !street|| !building|| !email || !password || !confirmPassword ) {
       Alert.alert('Error', 'Lütfen * içeren tüm alanları doldurun.');
       return;
@@ -28,34 +36,36 @@ const SignUpViewRestaurant = ({navigation}) => {
     if (password !== confirmPassword) {
       Alert.alert('Error', 'Şifreler eşleşmiyor. Lütfen aynı şifreyi tekrar girin.');
       return;
-    }else{
+    }
+    else{
       const restaurantData = {
-         name:name,
-         city: city,
-         district: district,
-         neighbourhood: neighbourhood,
-         street: street,
-         building: building,
-         email:email,
-         password:password,
+        name: name,
+        // city: city,
+        // district: district,
+        // neighbourhood: neighbourhood,
+        // street: street,
+        // building: building,
+        email: email,
+        password: password,
+        latitude: location.lat,
+        longitude: location.lng,
       };
-       console.log(restaurantData);
-       RestaurantViewModel.mapRestaurantData(restaurantData);
-   }
 
-
-    
-    setName('');
-    setCity('');
-    setDistrict('');
-    setNeighbourhood('');
-    setStreet('');
-    setBuilding('');
-    setEmail('');
-    setPassword('');
-    setConfirmPassword('');
-    setIsPolicyChecked(false);
-    setIsTermsChecked(false);
+      console.log(restaurantData);
+      RestaurantViewModel.mapRestaurantData(restaurantData);
+      
+      setName('');
+      setCity('');
+      setDistrict('');
+      setNeighbourhood('');
+      setStreet('');
+      setBuilding('');
+      setEmail('');
+      setPassword('');
+      setConfirmPassword('');
+      setIsPolicyChecked(false);
+      setIsTermsChecked(false);
+    }
 
   };
 
@@ -112,7 +122,7 @@ return (
       />
       <TextInput
         style={styles.input}
-        placeholder="Bina*"
+        placeholder="Bina No*"
         value={building}
         onChangeText={setBuilding}
       />

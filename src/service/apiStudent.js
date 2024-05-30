@@ -1,5 +1,4 @@
-class apiStudent{
-
+class apiStudent {
     static async saveStudent(data) {
         try {
             console.log('JSON data to be sent:', JSON.stringify(data));
@@ -11,10 +10,10 @@ class apiStudent{
                 },
                 body: JSON.stringify(data)
             });
-    
+
             const responseText = await response.text();
             console.log('Raw response text:', responseText);
-    
+
             if (!response.ok) {
                 let errorData;
                 try {
@@ -23,17 +22,23 @@ class apiStudent{
                     console.error('Response is not JSON:', responseText);
                     throw new Error(`Network response was not ok: ${response.statusText}. Non-JSON response: ${responseText}`);
                 }
-    
+
                 console.error('Error data:', errorData);
                 throw new Error(`Network response was not ok: ${response.statusText}. Error details: ${JSON.stringify(errorData)}`);
             } else {
-                if (responseText === 'true') {
+                if (responseText.trim().toLowerCase() === 'true') {
                     alert('Kayıt işlemi başarılı.');
                     return true;
                 } else {
-                    const responseData = JSON.parse(responseText);
-                    console.log('Response data:', responseData);
-                    return responseData;
+                    let responseData;
+                    try {
+                        responseData = JSON.parse(responseText);
+                        console.log('Response data:', responseData);
+                        return responseData;
+                    } catch (e) {
+                        console.log('Response is not JSON. Raw response:', responseText);
+                        return responseText;
+                    }
                 }
             }
         } catch (error) {
@@ -41,7 +46,6 @@ class apiStudent{
             throw error;
         }
     }
-
-
 }
+
 export default apiStudent;

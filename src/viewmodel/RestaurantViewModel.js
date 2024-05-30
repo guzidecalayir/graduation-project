@@ -11,11 +11,8 @@ class RestaurantViewModel{
                 restaurant = restaurantData.map(data => {
                     return new Restaurant(
                         this.name,
-                        this.city,
-                        this.district,
-                        this.neighbourhood,
-                        this.street,
-                        this.building,
+                        this.longitude,
+                        this.latitude,
                         this.email,
                         this.password,
                     );
@@ -23,11 +20,8 @@ class RestaurantViewModel{
             } else {
                 restaurant = new Restaurant(
                     restaurantData.name,
-                    restaurantData.city,
-                    restaurantData.district,
-                    restaurantData.neighbourhood,
-                    restaurantData.street,
-                    restaurantData.building,
+                    restaurantData.longitude,
+                    restaurantData.latitude,
                     restaurantData.email,
                     restaurantData.password,
                 );
