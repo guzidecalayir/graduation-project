@@ -1,43 +1,43 @@
-class Philanthropist {
-    constructor (firstName, lastName, email, password, phoneNumber, totalDonation){
-        // this.id = id;
+class Student {
+    constructor (firstName, lastName, email, password, phoneNumber, school, birthDate){
+        
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
         this.phoneNumber = phoneNumber;
-        // this.salt = salt;
-        this.totalDonation = totalDonation;
+        this.school = school;
+        this.birthDate = birthDate;
+        
     }
 
     // Method to convert the object to a plain JavaScript object
     toPlainObject() {
         return {
-            // id: this.id,
+            
             firstName: this.firstName,
             lastName: this.lastName,
             email: this.email,
             password: this.password,
             phoneNumber: this.phoneNumber,
-            // salt: this.salt,
-            totalDonation: this.totalDonation
-
+            school : school,
+            birthDate : birthDate,
         };
     }
 
     // Method to clone the object
     clone() {
-        return new Philanthropist(
-            // this.id,
+        return new Student(
+
             this.firstName,
             this.lastName,
             this.email,
             this.password,
             this.phoneNumber,
-            // this.salt,
-            this.totalDonation
+            this.school ,
+            this.birthDate,
         );
     }
 }
 
-export default Philanthropist;
+export default Student;

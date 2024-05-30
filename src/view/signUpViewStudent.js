@@ -6,58 +6,54 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 const SignUpViewStudent = ({navigation}) => {
   const [name, setName] = useState('');
   const [surname, setSurname] = useState('');
-  const [selectedDate, setSelectedDate] = useState(null);
+  const [birthDate, setSelectedDate] = useState(null);
   const [isDateTimePickerVisible, setIsDateTimePickerVisible] = useState(false);
   const [university, setUniName] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [isPolicyChecked, setIsPolicyChecked] = useState(false);
   const [isTermsChecked, setIsTermsChecked] = useState(false);
 
-  const isUniversityEmail = (email) => {
-    return email.endsWith('@university.edu'); // Üniversitenin e-posta alan adını kontrol ediyoruz
-  };
 
   const handleSignUp = () => {
-    if (!name || !surname || !selectedDate|| !university || !email || !password || !confirmPassword ) {
+    if (!name || !surname || !birthDate|| !university || !email || !phoneNumber || !password || !confirmPassword ) {
       Alert.alert('Error', 'Lütfen * içeren tüm alanları doldurun.');
       return;
     }
-
-    if (!isUniversityEmail(email)) {
-      Alert.alert('Error', 'Lütfen bir üniversite e-mail adresi kullanın.');
-      return;
-    }
-
-
     if (!isPolicyChecked || !isTermsChecked) {
         Alert.alert('Error', 'Lütfen izinleri onaylayın.');
         return;
     }
-
     if (password !== confirmPassword) {
       Alert.alert('Error', 'Şifreler eşleşmiyor. Lütfen aynı şifreyi tekrar girin.');
       return;
-    }
+    }else{
+      const studentData = {
+         name:name,
+         surname: surname,
+         birthDate: birthDate,
+         school: university,
+         phoneNumber: phoneNumber,
+         email:email,
+         password:password,
+      };
+       console.log(studentData);
+       StudentViewModel.mapStudentData(studentData);
+   }
 
-    // Kayıt işlemini gerçekleştir
-    console.log('name:', name);
-    console.log('surname :', surname);
-    console.log('Email:', email);
-    console.log('Password:', password);
-    console.log('Selected Date:', selectedDate);
+    
 
     setName('');
     setSurname('');
     setSelectedDate(new Date());
     setUniName('');
+    setPhoneNumber('');
     setEmail('');
     setPassword('');
     setIsPolicyChecked(false);
     setIsTermsChecked(false);
-
-    Alert.alert('Başarılı', 'Kayıt olma işlemi başarılı.');
   };
 
   const handleCancel = () => {
@@ -65,6 +61,7 @@ const SignUpViewStudent = ({navigation}) => {
     setSurname('');
     setSelectedDate(new Date());
     setUniName('');
+    setPhoneNumber('');
     setEmail('');
     setPassword('');
     setIsPolicyChecked(false);
@@ -81,7 +78,7 @@ const SignUpViewStudent = ({navigation}) => {
   };
 
   const handleDateChange = (event, date) => {
-    setSelectedDate(date || selectedDate);
+    setSelectedDate(date || birthDate);
     hideDateTimePicker();
   };
       
@@ -105,14 +102,14 @@ return (
     <View style={styles.dateInputContainer}>
       <TextInput
         style={styles.dateInput}
-        placeholder={selectedDate ? '' : 'Doğum Tarihi*'}
-        value={selectedDate ? selectedDate.toLocaleDateString() : ''}
+        placeholder={birthDate ? '' : 'Doğum Tarihi*'}
+        value={birthDate ? birthDate.toLocaleDateString() : ''}
         editable={false}
         onPressIn={showDateTimePicker}
       />
       {isDateTimePickerVisible && (
         <DateTimePicker
-          value={selectedDate || new Date()}
+          value={birthDate || new Date()}
           mode="date"
           display="default"
           onChange={handleDateChange}
@@ -132,6 +129,13 @@ return (
       value={email}
       onChangeText={(text) => setEmail(text)}
       keyboardType="email-address"
+    />
+    <TextInput
+      style={styles.input}
+      placeholder="Telefon Numarası*"
+      value={phoneNumber}
+      onChangeText={(text) => setPhoneNumber(text)}
+      keyboardType="numeric"
     />
     <TextInput
       style={styles.input}

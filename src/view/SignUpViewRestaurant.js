@@ -21,28 +21,28 @@ const SignUpViewRestaurant = ({navigation}) => {
       Alert.alert('Error', 'Lütfen * içeren tüm alanları doldurun.');
       return;
     }
-
-    const isValidEmail = (email) => {
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      return emailRegex.test(email);
-    };
-    
-
-    if (!isValidEmail(email)) {
-      Alert.alert('Error', 'Lütfen geçerli bir e-posta adresi girin.');
-      return;
-    }
-
-
     if (!isPolicyChecked || !isTermsChecked) {
         Alert.alert('Error', 'Lütfen izinleri onaylayın.');
         return;
     }
-
     if (password !== confirmPassword) {
       Alert.alert('Error', 'Şifreler eşleşmiyor. Lütfen aynı şifreyi tekrar girin.');
       return;
-    }
+    }else{
+      const restaurantData = {
+         name:name,
+         city: city,
+         district: district,
+         neighbourhood: neighbourhood,
+         street: street,
+         building: building,
+         email:email,
+         password:password,
+      };
+       console.log(restaurantData);
+       RestaurantViewModel.mapRestaurantData(restaurantData);
+   }
+
 
     
     setName('');
@@ -57,7 +57,6 @@ const SignUpViewRestaurant = ({navigation}) => {
     setIsPolicyChecked(false);
     setIsTermsChecked(false);
 
-    Alert.alert('Başarılı', 'Kayıt olma işlemi başarılı.');
   };
 
   const handleCancel = () => {

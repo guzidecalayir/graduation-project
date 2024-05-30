@@ -1,6 +1,8 @@
 
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, Alert, StyleSheet, Switch, TouchableOpacity, ScrollView} from 'react-native';
+import PhilanthropistViewModel from '../viewmodel/PhilanthropistViewModel';
+
 
 const SignUpViewPhilanthropist = ({navigation}) => {
   const [name, setName] = useState('');
@@ -12,49 +14,44 @@ const SignUpViewPhilanthropist = ({navigation}) => {
   const [isPolicyChecked, setIsPolicyChecked] = useState(false);
   const [isTermsChecked, setIsTermsChecked] = useState(false);
 
-
+  
   const handleSignUp = () => {
+
+  
+   
     if (!name || !surname ||  !email || !password || !confirmPassword ) {
       Alert.alert('Error', 'Lütfen * içeren tüm alanları doldurun.');
       return;
-    }
-
-    const isValidEmail = (email) => {
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      return emailRegex.test(email);
-    };
-    
-    if (!isValidEmail(email)) {
-      Alert.alert('Error', 'Lütfen geçerli bir e-posta adresi girin.');
-      return;
-    }
-    if (!isValidPhoneNumber(phoneNumber)) {
-      Alert.alert('Error', 'Lütfen geçerli bir telefon numarası girin.');
-      return;
-    }
-  
-    if (!isPolicyChecked || !isTermsChecked) {
+    }else if (!isPolicyChecked || !isTermsChecked) {
         Alert.alert('Error', 'Lütfen izinleri onaylayın.');
         return;
-    }
-
-    if (password !== confirmPassword) {
+    }else if (password !== confirmPassword) {
       Alert.alert('Error', 'Şifreler eşleşmiyor. Lütfen aynı şifreyi tekrar girin.');
       return;
+    }else{
+       const philanthropistData = {
+          firstName:name,
+          lastName:surname,
+          email:email,
+          phoneNumber:phoneNumber,
+          password:password,
+          totalDonation:0
+       };
+        console.log(philanthropistData);
+        PhilanthropistViewModel.mapPhilanthropistData(philanthropistData);
     }
 
     
-
     setName('');
     setSurname('');
     setEmail('');
     setPassword('');
+    setConfirmPassword('');
     setPhoneNumber('');
     setIsPolicyChecked(false);
     setIsTermsChecked(false);
 
-    Alert.alert('Başarılı', 'Kayıt olma işlemi başarılı.');
-    navigation.navigate('Profile Philanthropist');
+    
   };
 
   const handleCancel = () => {
@@ -62,15 +59,13 @@ const SignUpViewPhilanthropist = ({navigation}) => {
     setSurname('');
     setEmail('');
     setPassword('');
+    setConfirmPassword('');
     setPhoneNumber('');
     setIsPolicyChecked(false);
     setIsTermsChecked(false);
     Alert.alert('Bilgi', 'Kayıt Olma İptal Edildi.');
   };
-  const isValidPhoneNumber = (phoneNumber) => {
-    const phoneRegex = /^\d{10}$/;
-    return phoneRegex.test(phoneNumber);
-  };
+  
   
             
 return (
@@ -91,10 +86,10 @@ return (
       />
        <TextInput
         style={styles.input}
-        placeholder="Telefon Numarası"
-        value={email}
-        onChangeText={(text) => setEmail(text)}
-        keyboardType="email-address"
+        placeholder="Telefon Numarası* (5**)"
+        value={phoneNumber}
+        onChangeText={(text) => setPhoneNumber(text)}
+        keyboardType="numeric"
       />
       
       <TextInput
@@ -153,7 +148,7 @@ return (
     </View>
     </ScrollView>
   );
-};
+}
 
 const styles = StyleSheet.create({
     scrollView: {

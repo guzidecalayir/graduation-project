@@ -6,6 +6,7 @@ const SignInViewStudent = ({ navigation }) => {
   const [password, setPassword] = useState('');
 
   const handleSignIn = async () => {
+
     try {
       // Implement your authentication logic here
       const hardcodedEmail = 'student@example.com';
