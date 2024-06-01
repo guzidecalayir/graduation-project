@@ -1,29 +1,16 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, Button, Alert, StyleSheet, TouchableOpacity } from 'react-native';
+import React, { useState, useContext } from 'react';
+import { View, Text, TextInput, Alert, StyleSheet, TouchableOpacity } from 'react-native';
+import { AuthContext } from '../context/AuthContext';
 
 const SignInViewStudent = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleSignIn = async () => {
+  const {login} = useContext(AuthContext);
 
-    try {
-      // Implement your authentication logic here
-      const hardcodedEmail = 'student@example.com';
-      const hardcodedPassword = 'password';
-      
-      if (email === hardcodedEmail && password === hardcodedPassword) {
-        Alert.alert('Success', 'Authentication successful.');
-        // Reset form fields after successful sign-in
-        setEmail('');
-        setPassword('');
-      } else {
-        throw new Error('Invalid email or password.');
-      }
-    } catch (error) {
-      Alert.alert('Error', error.message);
-    }
-  };
+  const userType = 'student';
+
+  
 
   return (
     <View style={styles.container}>
@@ -43,7 +30,7 @@ const SignInViewStudent = ({ navigation }) => {
         secureTextEntry={true}
       />
       <View style={styles.buttonsContainer}>
-        <TouchableOpacity onPress={handleSignIn} style={styles.buttonContainer}>
+        <TouchableOpacity onPress={() => login(email, password, userType)} style={styles.buttonContainer}>
           <Text style={styles.buttonText}>Giriş</Text>
         </TouchableOpacity>
       </View>

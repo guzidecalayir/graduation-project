@@ -26,11 +26,11 @@ const ProfileViewStudent = ({ navigation }) => {
   };
 
   const handleSelectPhoto = () => {
-    launchImageLibrary({ mediaType: 'photo' }, (response) => {
-      if (response.assets && response.assets.length > 0) {
-        setPhoto(response.assets[0].uri);
-      }
-    });
+    // launchImageLibrary({ mediaType: 'photo' }, (response) => {
+    //   if (response.assets && response.assets.length > 0) {
+    //     setPhoto(response.assets[0].uri);
+    //   }
+    // });
   };
 
   return (

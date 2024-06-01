@@ -35,6 +35,26 @@ class RestaurantViewModel{
         }
     }
 
+    static async mapRestaurantSignInData(restaurantSignInData) {
+        try {
+            
+            const { email, password } = restaurantSignInData;
+    
+            
+            const restaurant = {
+                email: email,
+                password: password
+            };
+            
+            
+            await apiRestaurant.signInRestaurant(restaurant);
+            
+        } catch (error) {
+            
+            console.error('Error:', error);
+            throw error;
+        }
+    }
 
 
 

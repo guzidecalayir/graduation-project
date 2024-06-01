@@ -7,19 +7,19 @@ const SignInView = ({ navigation }) => {
     <Image source={require('../assets/logo.jpeg')} style={styles.logo} />
       <TouchableOpacity
         style={styles.button}
-        onPress={() => navigation.navigate('Sign In Student')}
+        onPress={() => navigation.navigate('Sign In Student', { userType: 'student' })}
       >
         <Text style={styles.buttonText}>Öğrenci Girişi</Text>
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.button}
-        onPress={() => navigation.navigate('Sign In Philanthropist')}
+        onPress={() => navigation.navigate('Sign In Philanthropist', { userType: 'philanthropist' })}
       >
         <Text style={styles.buttonText}>Yardımsever Girişi</Text>
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.button}
-        onPress={() => navigation.navigate('Sign In Restaurant')}
+        onPress={() => navigation.navigate('Sign In Restaurant', { userType: 'restaurant' })}
       >
         <Text style={styles.buttonText}>Restoran Girişi</Text>
       </TouchableOpacity>

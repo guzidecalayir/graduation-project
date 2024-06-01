@@ -24,9 +24,9 @@ function SignStack() {
         <Stack.Screen name="Joint Page" component={JointPage} options={{ headerShown: false }} />
         <Stack.Screen name="Sign In" component={SignInView} options={{ headerShown: false }} />
         <Stack.Screen name="Sign Up" component={SignUpView} options={{ headerShown: false }} />
-        <Stack.Screen name="Sign In Student" component={SignInViewStudent} options={{ headerShown: false }} />
-        <Stack.Screen name="Sign In Restaurant" component={SignInViewRestaurant} options={{ headerShown: false }} />
-        <Stack.Screen name="Sign In Philanthropist" component={SignInViewPhilanthropist} options={{ headerShown: false }} />
+        <Stack.Screen name="Sign In Student" component={SignInViewStudent} options={{ headerShown: false }} initialParams={{ userType: 'student' }}/>
+        <Stack.Screen name="Sign In Restaurant" component={SignInViewRestaurant} options={{ headerShown: false }} initialParams={{ userType: 'restaurant' }}/>
+        <Stack.Screen name="Sign In Philanthropist" component={SignInViewPhilanthropist} options={{ headerShown: false }} initialParams={{ userType: 'philanthropist' }} />
         <Stack.Screen name="Sign Up Student" component={SignUpViewStudent} options={{ headerShown: false }} />
         <Stack.Screen name="Sign Up Restaurant" component={SignUpViewRestaurant} options={{ headerShown: false }} />
         <Stack.Screen name="Sign Up Philanthropist" component={SignUpViewPhilanthropist} options={{ headerShown: false }} /> 

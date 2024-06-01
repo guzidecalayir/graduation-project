@@ -15,7 +15,7 @@ class Restaurant {
         return {
             
             name: this.name,
-            longitude : this.cilongitudety,
+            longitude : this.longitude,
             latitude : this.latitude,
             email: this.email,
             password: this.password,

@@ -1,35 +1,15 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, Button, Alert, StyleSheet, TouchableOpacity } from 'react-native';
+import React, { useState, useContext } from 'react';
+import { View, Text, TextInput,  StyleSheet, TouchableOpacity } from 'react-native';
+import { AuthContext } from '../context/AuthContext';
 
 const SignInViewPhilanthropist = ({navigation}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleSignInPhilanthropist = async () => {
-    const philanthropistSignInData = () => {
-      return {
-        email,
-        password
-      };
-    } 
-    // try {
-    //   // Implement your authentication logic here
-    //   // For demonstration purposes, let's assume authentication is successful if the email and password match a hardcoded value
-    //   const hardcodedEmail = 'philanthropist@example.com';
-    //   const hardcodedPassword = 'password';
-      
-    //   if (email === hardcodedEmail && password === hardcodedPassword) {
-    //     Alert.alert('Success', 'Authentication successful.');
-    //     // Reset form fields after successful sign-in
-    //     setEmail('');
-    //     setPassword('');
-    //   } else {
-    //     throw new Error('Invalid email or password.');
-    //   }
-    // } catch (error) {
-    //   Alert.alert('Error', error.message);
-    // }
-  };
+  const {login} = useContext(AuthContext);
+
+  const userType = 'philanthropist';
+  
 
   return (
     <View style={styles.container}>
@@ -49,7 +29,10 @@ const SignInViewPhilanthropist = ({navigation}) => {
         secureTextEntry={true}
       />
        <View style={styles.buttonsContainer}>
-        <TouchableOpacity onPress={handleSignInPhilanthropist} style={styles.buttonContainer}>
+       <TouchableOpacity 
+          onPress={() => login(email, password, userType)} 
+          style={styles.buttonContainer}
+        >
           <Text style={styles.buttonText}>Giriş</Text>
         </TouchableOpacity>
       </View>

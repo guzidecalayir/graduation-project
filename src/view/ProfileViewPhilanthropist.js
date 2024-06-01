@@ -1,14 +1,27 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, Alert, StyleSheet, ScrollView, Image } from 'react-native';
 import { launchImageLibrary } from 'react-native-image-picker';
+import { useRoute } from '@react-navigation/native';
 
 const ProfileViewStudent = ({ navigation }) => {
+  const route = useRoute();
+  // const { responseData } = route.params;
+  
   const [name, setName] = useState('');
   const [surname, setSurname] = useState('');
   const [email, setEmail] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [isEditing, setIsEditing] = useState(false);
-  const [photo, setPhoto] = useState(null);
+  
+
+  // useEffect(() => {
+  //   if (responseData) {
+  //     setName(responseData.name);
+  //     setSurname(responseData.surname);
+  //     setEmail(responseData.email);
+  //     setPhoneNumber(responseData.phoneNumber);
+  //   }
+  // }, [responseData]);
 
   const handleSave = () => {
     Alert.alert('Başarılı', 'Profil başarıyla güncellendi.');
@@ -25,31 +38,18 @@ const ProfileViewStudent = ({ navigation }) => {
   };
 
   const handleSelectPhoto = () => {
-    launchImageLibrary({ mediaType: 'photo' }, (response) => {
-      if (response.assets && response.assets.length > 0) {
-        setPhoto(response.assets[0].uri);
-      }
-    });
+    // launchImageLibrary({ mediaType: 'photo' }, (response) => {
+    //   if (response.assets && response.assets.length > 0) {
+    //     setPhoto(response.assets[0].uri);
+    //   }
+    // });
   };
+  
 
   return (
     <ScrollView contentContainerStyle={styles.scrollView}>
       <View style={styles.container}>
         <Text style={styles.title}>Profilim</Text>
-
-        <View style={styles.fieldContainer}>
-          <Text style={styles.label}>Profil Fotoğrafım</Text>
-          <View style={[styles.photoContainer, photo && styles.photoBorder]}>
-            {photo ? (
-              <Image source={{ uri: photo }} style={styles.photo} />
-            ) : (
-              <Text style={styles.noPhotoText}>Fotoğraf Seçilmedi</Text>
-            )}
-          </View>
-          {isEditing && (
-            <Button title="Fotoğraf Seç" onPress={handleSelectPhoto} />
-          )}
-        </View>
 
         <View style={styles.fieldContainer}>
           <Text style={styles.label}>Ad</Text>
@@ -190,5 +190,6 @@ const styles = StyleSheet.create({
     color: '#999',
   },
 });
+
 
 export default ProfileViewStudent;

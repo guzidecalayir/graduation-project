@@ -61,33 +61,32 @@ class PhilanthropistViewModel {
             throw error;
         }
     }
-    
-    
-//     static async mapSignInPhilanthropistData() {
-//         try {
-//             // Fetch philanthropist data from the API
-//             const philanthropistData = await philanthropistSignInData();
-            
-            
-//             const philanthropistSignIn = philanthropistSignInData.map(data => {
-//                 return new Philanthropist(
-//                     data.id,
-//                     data.firstName,
-//                     data.lastName,
-//                     data.e_mail,
-//                     data.password,
-//                     data.phoneNumber,
-//                     data.salt,
-//                     data.totalDonation
-//                 );
-//             });
 
-//             return Philanthropist;
-//         } catch (error) {
-//             console.error('Error fetching philanthropist data:', error);
-//             throw error;
-//         }
-//     }
+    static async mapPhilanthropistSignInData(philanthropistSignInData) {
+        try {
+            
+            const { email, password } = philanthropistSignInData;
+    
+            
+            const philanthropist = {
+                email: email,
+                password: password
+            };
+            
+            
+            await apiPhilanthropist.signInPhilanthropist(philanthropist);
+            
+        } catch (error) {
+            
+            console.error('Error:', error);
+            throw error;
+        }
+    }
+    
+    
+    
+    
+    
 
 }
 

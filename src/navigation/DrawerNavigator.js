@@ -1,91 +1,84 @@
-import React from 'react';
-import { StyleSheet, TouchableOpacity, Text, View } from 'react-native';
+import React, { useContext } from 'react';
+import { StyleSheet} from 'react-native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import { DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer';
+import { AuthContext } from '../context/AuthContext';
 
+import LogOut from '../view/LogOut';
+import AddMenuItemView from '../view/AddMenuItemView';
 import DemandView from '../view/DemandView';
 import QRCodeView from '../view/QRCodeView';
+import HomeStack from './HomeStack';
+import PaymentView from '../view/PaymentView';
 import { Entypo } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
-import HomeStack from './HomeStack';
-import AddMenuItemView from '../view/AddMenuItemView';
-import PaymentView from '../view/PaymentView';
 import { FontAwesome5 } from '@expo/vector-icons';
-import SignStack from './SignStack';
+import { MaterialIcons } from '@expo/vector-icons';
+
+
 
 const Drawer = createDrawerNavigator();
 
-function CustomDrawerContent(props) {
-  const handleLogout = () => {
-    // Çıkış yapma işlemini burada gerçekleştirin
-  };
+const drawerScreensConfig = {
+  student: [
+    { name: "Ana Sayfa", component: HomeStack,  icon: (color, size) => <Ionicons name="restaurant" size={size} color={color} /> },
+    { name: "Talepler", component: DemandView, icon: (color, size) => <FontAwesome name="list-alt" size={size} color={color} /> },
+    { name: "QR Kod", component: QRCodeView, icon: (color, size) => <AntDesign name="qrcode" size={size} color={color} /> },
+  ],
+  philanthropist: [
+    { name: "Ana Sayfa", component: HomeStack, icon: (color, size) => <Ionicons name="restaurant" size={size} color={color} /> },
+    { name: "Talepler", component: DemandView, icon: (color, size) => <FontAwesome name="list-alt" size={size} color={color} /> },
+    { name: "Bağış Yap", component: PaymentView, icon: (color, size) => <FontAwesome5 name="donate" size={24} color="black" /> },
+  ],
+  restaurant: [
+    { name: "Ana Sayfa", component: HomeStack, icon: (color, size) => <Ionicons name="restaurant" size={size} color={color} /> },
+    { name: "Talepler", component: DemandView, icon: (color, size) => <FontAwesome name="list-alt" size={size} color={color} /> },
+    { name: "Menü Güncelle", component: AddMenuItemView, icon: (color, size) => <Entypo name="add-to-list" size={size} color={color} /> },
+  ],
+};
 
-  return (
-    <DrawerContentScrollView {...props}>
-      <DrawerItemList {...props} />
-      <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
-        <Text style={styles.logoutText}>Çıkış Yap</Text>
-      </TouchableOpacity>
-    </DrawerContentScrollView>
-  );
-}
 
-function DrawerNavigator() {
+const DrawerNavigator = () => {
+  const { userType } = useContext(AuthContext);
+  const screens = drawerScreensConfig[userType];
+
+  if (!screens) {
+    return null; 
+  }
+console.log('Drawer:'+ userType)
   return (
-    <Drawer.Navigator
-      screenOptions={{
-        headerTitle: () => (
-          <Ionicons
-            name="restaurant" 
-            size={32}
-            color="black"
-          />)
-      }}
-      drawerContent={props => <CustomDrawerContent {...props} />}
-    >
-      <Drawer.Screen name="Anasayfa" component={HomeStack} options={{
-        drawerIcon: ({ color, size }) => (
-          <Ionicons name="restaurant" size={size} color={color} />
-        )}}
-      />
-      <Drawer.Screen name="Talepler" component={DemandView} options={{
-        drawerIcon: ({ color, size }) => (
-          <FontAwesome name="list-alt" size={size} color={color} />
-        )}}
-      />
-      <Drawer.Screen name="QR Kod" component={QRCodeView} options={{
-        drawerIcon: ({ color, size }) => (
-          <AntDesign name="qrcode" size={size} color={color} />
-        )}}
-      />
-      <Drawer.Screen name="Menü Güncelle" component={AddMenuItemView} options={{
-        drawerIcon: ({ color, size }) => (
-          <Entypo name="add-to-list" size={size} color={color} />
-        )}}
-      />
-      <Drawer.Screen name="Bağış Yap" component={PaymentView} options={{
-        drawerIcon: ({ color, size }) => (
-          <FontAwesome5 name="donate" size={24} color="black" />
-        )}}
-      />
-      <Drawer.Screen name="GirişKayıt" component={SignStack} options={{
-        drawerIcon: ({ color, size }) => (
-          <AntDesign name="enter" size={24} color="black" />
-        )}}
-      />
+    
+    <Drawer.Navigator initialRouteName="Ana Sayfa">
+      {screens.map((screen, index) => (
+        <Drawer.Screen
+          key={index}
+          name={screen.name}
+          component={screen.component}
+          options={{
+            drawerIcon: ({ color, size }) => screen.icon(color, size),
+          }}
+        />
+      ))}
+      <Drawer.Screen
+        name= "Çıkış Yap"
+        component={LogOut}
+        options={{
+          drawerIcon: ({ color, size }) =><MaterialIcons name="logout" size={size} color={color} />,
+        }}>
+      </Drawer.Screen>
+      
+      
     </Drawer.Navigator>
   );
-}
-
+};
 const styles = StyleSheet.create({
   logoutButton: {
     marginVertical: 10,
     marginHorizontal: 16,
     paddingVertical: 10,
     paddingHorizontal: 20,
-    backgroundColor: 'red',
+    backgroundColor: 'red', 
     borderRadius: 5,
   },
   logoutText: {
@@ -95,5 +88,4 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
-
 export default DrawerNavigator;

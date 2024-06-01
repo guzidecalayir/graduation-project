@@ -39,6 +39,27 @@ class StudentViewModel{
         }
     }
 
+    static async mapStudentSignInData(studentSignInData) {
+        try {
+            
+            const { email, password } = studentSignInData;
+    
+            
+            const student = {
+                email: email,
+                password: password
+            };
+            
+            
+            await apiStudent.signInStudent(student);
+            
+        } catch (error) {
+            
+            console.error('Error:', error);
+            throw error;
+        }
+    }
+
 
 
 
