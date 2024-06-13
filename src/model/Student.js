@@ -1,13 +1,14 @@
 class Student {
-    constructor (firstName, lastName, email, password, phoneNumber, school, birthDate){
+    constructor (firstName, lastName, school, phoneNumber, birthDate, email, password){
         
         this.firstName = firstName;
         this.lastName = lastName;
+        this.school = school;
+        this.phoneNumber = phoneNumber;
+        this.birthDate = birthDate;
         this.email = email;
         this.password = password;
-        this.phoneNumber = phoneNumber;
-        this.school = school;
-        this.birthDate = birthDate;
+        
         
     }
 
@@ -17,11 +18,13 @@ class Student {
             
             firstName: this.firstName,
             lastName: this.lastName,
+            school : this.school,
+            phoneNumber: this.phoneNumber,
+            birthDate : this.birthDate,
             email: this.email,
             password: this.password,
-            phoneNumber: this.phoneNumber,
-            school : this.school,
-            birthDate : this.birthDate,
+    
+            
         };
     }
 
@@ -31,11 +34,14 @@ class Student {
 
             this.firstName,
             this.lastName,
+            this.school ,
+            this.phoneNumber,
+            this.birthDate,
             this.email,
             this.password,
-            this.phoneNumber,
-            this.school ,
-            this.birthDate,
+            
+            
+            
         );
     }
 }

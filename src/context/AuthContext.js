@@ -13,7 +13,7 @@ export const AuthProvider = ({ children }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [userToken, setUserToken] = useState(null);
     const [userType, setUserType] = useState(null);
-    const [userProfile, setUserProfile] = useState(null);
+    
 
     const login = async (email, password, userType) => {
         setIsLoading(true);
@@ -23,9 +23,6 @@ export const AuthProvider = ({ children }) => {
                 const token = await PhilanthropistViewModel.mapPhilanthropistSignInData(data);
                 setUserToken(token);
                 setUserType(userType);
-                const user = await apiPhilanthropist.getProfile(token);
-                setUserProfile(user);
-
             } catch (error) {
                 console.error('Error while logging in:', error);
                 Alert.alert('Error', 'Failed to log in.');
@@ -38,8 +35,6 @@ export const AuthProvider = ({ children }) => {
                 const token = await StudentViewModel.mapStudentSignInData(data);
                 setUserToken(token);
                 setUserType(userType);
-                const user = await apiStudent.getProfile(token);
-                setUserProfile(user);
             } catch (error) {
                 console.error('Error while logging in:', error);
                 Alert.alert('Error', 'Failed to log in.');
@@ -52,8 +47,6 @@ export const AuthProvider = ({ children }) => {
                 const token = await RestaurantViewModel.mapRestaurantSignInData(data);
                 setUserToken(token);
                 setUserType(userType);
-                const user = await apiRestaurant.getProfile(token);
-                setUserProfile(user);
             } catch (error) {
                 console.error('Error while logging in:', error);
                 Alert.alert('Error', 'Failed to log in.');
@@ -71,7 +64,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     return (
-        <AuthContext.Provider value={{ login, logout, isLoading, userToken, userType, userProfile }}>
+        <AuthContext.Provider value={{ login, logout, isLoading, userToken, userType}}>
             {children}
         </AuthContext.Provider>
     );

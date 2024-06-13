@@ -1,26 +1,29 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState, useContext, useRef } from 'react';
 import { View, Text, StyleSheet, FlatList } from 'react-native';
 import { AuthContext } from '../context/AuthContext';
+import apiPhilanthropist from '../service/apiPhilanthropist';
+import Philanthropist from '../model/Philanthropist';
 
-const ProfileViewStudent = ({ navigation }) => {
-  const { userProfile } = useContext(AuthContext);
-
-  const [profileData, setProfileData] = useState({});
+const ProfileViewStudent = () => {
+  const { userToken } = useContext(AuthContext);
   const [loading, setLoading] = useState(true);
-
+  const myUserRef = useRef(null);
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
-        if (userProfile && userProfile!== null && userProfile!== undefined) {
-          
-          setProfileData({
-            firstName: userProfile.firstName,
-            lastName: userProfile.lastName,
-            phoneNumber: userProfile.phoneNumber,
-            email: userProfile.email,
-          });
-          console.log('Fetched profile data:', userProfile);
-        }
+        const user = await apiPhilanthropist.getProfile(userToken)
+        console.log(user);
+        const philanthropist = new Philanthropist(
+          user.firstName,
+          user.lastName,
+          user.email,
+          user.password,
+          user.phoneNumber,
+          user.totalDonation
+        );
+        console.log(philanthropist)
+        myUserRef.current = philanthropist;
       } catch (error) {
         console.log(error);
       } finally {
@@ -29,15 +32,7 @@ const ProfileViewStudent = ({ navigation }) => {
     };
 
     fetchData();
-  }, [userProfile, setProfileData]);
-
-  // Map the profileData to an array for FlatList
-  const profileArray = [
-    { label: 'Ad', value: profileData.firstName || 'N/A' },
-    { label: 'Soyad', value: profileData.lastName || 'N/A' },
-    { label: 'Email', value: profileData.email || 'N/A' },
-    { label: 'Telefon Numarası', value: profileData.phoneNumber || 'N/A' },
-  ];
+  }, [userToken]);
 
   const renderItem = ({ item }) => (
     <View style={styles.fieldContainer}>
@@ -50,10 +45,17 @@ const ProfileViewStudent = ({ navigation }) => {
     </View>
   );
 
+  console.log(myUserRef);
+  const profileArray = [
+    { label: 'Ad', value: myUserRef.current ? myUserRef.current.firstName : '' },
+    { label: 'Soyad', value: myUserRef.current ? myUserRef.current.lastName : '' },
+    { label: 'Email', value: myUserRef.current ? myUserRef.current.email : '' },
+    { label: 'Telefon Numarası', value: myUserRef.current ? myUserRef.current.phoneNumber : '' },
+  ];
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Profilim</Text>
-
       {loading ? (
         <Text style={styles.loadingText}>Loading...</Text>
       ) : (

@@ -80,7 +80,7 @@ class apiRestaurant{
             });
 
             
-            const responseText = await response.text();
+            const responseText = await response.json();
 
             if (!response.ok) {
                 if (response.status === 404) {

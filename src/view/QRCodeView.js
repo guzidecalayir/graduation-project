@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, StatusBar } from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 
-const QRCodeView = () => {
-  const [hasPermission, setHasPermission] = useState(null);
-  const [scanned, setScanned] = useState(false);
+export default function App() {
+  const [hasPermission, setHasPermission] = useState(false);
+  const [scanData, setScanData] = useState();
 
   useEffect(() => {
     (async () => {
@@ -13,51 +13,72 @@ const QRCodeView = () => {
     })();
   }, []);
 
-  const handleBarCodeScanned = ({ type, data }) => {
-    setScanned(true);
-    alert(`Barkod tarandı!`);
-  };
+  if (!hasPermission) {
+    return (
+      <View style={styles.container}>
+        <Text>Please grant camera permissions to app.</Text>
+      </View>
+    );
+  }
 
-  if (hasPermission === null) {
-    return <Text>Requesting for camera permission</Text>;
-  }
-  if (hasPermission === false) {
-    return <Text>No access to camera</Text>;
-  }
+  const handleBarCodeScanned = ({ type, data }) => {
+    alert(`QR kod tarandı.`);
+    setScanData(data);
+    console.log(`Data: ${data}`);
+  };
 
   return (
     <View style={styles.container}>
       <BarCodeScanner
-        onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
         style={StyleSheet.absoluteFillObject}
+        onBarCodeScanned={scanData? undefined : handleBarCodeScanned}
       />
-      {scanned && (
-        <TouchableOpacity style={styles.scanAgainButton} onPress={() => setScanned(false)}>
-          <Text style={styles.buttonText}>Scan Again</Text>
-        </TouchableOpacity>
+      {scanData && (
+        <View style={styles.bottomView}>
+          <TouchableOpacity onPress={() => setScanData(undefined)}>
+            <View style={styles.scanButton}>
+              <Text style={styles.scanButtonText}>Tekrar Tara?</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
       )}
+      <StatusBar style="auto" />
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: 'column',
-    justifyContent: 'center',
+    backgroundColor: '#fff',
     alignItems: 'center',
+    justifyContent: 'center',
   },
-  scanAgainButton: {
-    backgroundColor: 'rgba(0,0,0,0.7)',
-    padding: 15,
-    borderRadius: 10,
+  bottomView: {
     position: 'absolute',
     bottom: 20,
+    width: '100%',
+    alignItems: 'center',
   },
-  buttonText: {
-    color: 'white',
+  scanButton: {
+    backgroundColor: 'gray',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+    borderWidth: 2,
+    borderColor: 'white',
+    shadowColor: '#000000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  scanButtonText: {
+    color: '#ffffff',
     fontSize: 18,
+    fontWeight: 'bold',
   },
 });
-
-export default QRCodeView;

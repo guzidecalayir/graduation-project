@@ -1,142 +1,85 @@
-import React, { useState , useEffect, useContext} from 'react';
-import { View, Text, TextInput, Button, Alert, StyleSheet, ScrollView, Image } from 'react-native';
-import { launchImageLibrary } from 'react-native-image-picker';
+
+import React, { useEffect, useState, useContext, useRef } from 'react';
+import { View, Text, StyleSheet, FlatList, Alert } from 'react-native';
 import { AuthContext } from '../context/AuthContext';
-import apiPhilanthropist from '../service/apiPhilanthropist';
+import apiStudent from '../service/apiStudent';
+import Student from '../model/Student';
 
-const ProfileViewStudent = ({ navigation }) => {
-  const [name, setName] = useState('');
-  const [surname, setSurname] = useState('');
-  const [university, setUniversity] = useState('');
-  const [email, setEmail] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [isEditing, setIsEditing] = useState(false);
-
-  const { userToken } = useContext(AuthContext);  
+const ProfileViewStudent = () => {
+  const { userToken } = useContext(AuthContext);
+  const [loading, setLoading] = useState(true);
   
+  const myUserRef = useRef(null);
+
   useEffect(() => {
-    const fetchUserProfile = async () => {
+    const fetchData = async () => {
       try {
-        const response = await apiPhilanthropist.getProfile(userToken);
-        const { name, surname, school, email, phoneNumber } = response.data;
-        setName(name);
-        setSurname(surname);
-        setUniversity(school);
-        setEmail(email);
-        setPhoneNumber(phoneNumber);
+        const user= await apiStudent.getProfile(userToken);
+        console.log('user',user)
+        
+        const studentInstance = new Student(
+          user.firstName,
+          user.lastName,
+          user.school,
+          user.phoneNumber,
+          user.birthDate,
+          user.email,
+          user.password
+          
+        );
+        myUserRef.current = studentInstance;
+        
       } catch (error) {
-        console.error('Failed to fetch user profile:', error);
-        Alert.alert('Error', 'Failed to load user profile.');
+        console.log(error);
+      } finally {
+        setLoading(false);
       }
     };
 
-    fetchUserProfile();
+    fetchData();
   }, [userToken]);
 
-  const handleSave = () => {
-    Alert.alert('Başarılı', 'Profil güncellendi.');
-    setIsEditing(false);
-  };
+  const renderItem = ({ item }) => (
+    <View style={styles.fieldContainer}>
+      <View style={styles.labelContainer}>
+        <Text style={styles.label}>{item.label}</Text>
+      </View>
+      <View style={styles.fieldBorder}>
+        <Text style={styles.field}>{item.value}</Text>
+      </View>
+    </View>
+  );
 
-  const handleEdit = () => {
-    setIsEditing(true);
-  };
-
-  const handleCancel = () => {
-    setIsEditing(false);
-    Alert.alert('Bilgi', 'Düzenleme iptal edildi.');
-  };
-
-  
+  const profileArray = [
+    { label: 'Ad', value: myUserRef.current ? myUserRef.current.firstName : '' },
+    { label: 'Soyad', value: myUserRef.current ? myUserRef.current.lastName : '' },
+    { label: 'Üniversite', value: myUserRef.current ? myUserRef.current.school : '' },
+    { label: 'Telefon Numarası', value: myUserRef.current ? myUserRef.current.phoneNumber: '' },
+    { label: 'Doğum Günü', value: myUserRef.current ? myUserRef.current.birthDate: '' },
+    { label: 'Email', value: myUserRef.current ? myUserRef.current.email : ''},
+    
+  ];
 
   return (
-    <ScrollView contentContainerStyle={styles.scrollView}>
-      <View style={styles.container}>
-        <Text style={styles.title}>Profilim</Text>
-
-        <View style={styles.fieldContainer}>
-          <Text style={styles.label}>Ad</Text>
-          <TextInput
-            style={[styles.input, !isEditing && styles.disabledInput]}
-            value={name}
-            editable={isEditing}
-            onChangeText={setName}
-          />
-        </View>
-
-        <View style={styles.fieldContainer}>
-          <Text style={styles.label}>Soyad</Text>
-          <TextInput
-            style={[styles.input, !isEditing && styles.disabledInput]}
-            value={surname}
-            editable={isEditing}
-            onChangeText={setSurname}
-          />
-        </View>
-
-        <View style={styles.fieldContainer}>
-          <Text style={styles.label}>Üniversite</Text>
-          <TextInput
-            style={[styles.input, !isEditing && styles.disabledInput]}
-            value={university}
-            editable={isEditing}
-            onChangeText={setUniversity}
-          />
-        </View>
-
-        <View style={styles.fieldContainer}>
-          <Text style={styles.label}>Email</Text>
-          <TextInput
-            style={[styles.input, !isEditing && styles.disabledInput]}
-            value={email}
-            editable={isEditing}
-            onChangeText={setEmail}
-            keyboardType="email-address"
-          />
-        </View>
-
-        <View style={styles.fieldContainer}>
-          <Text style={styles.label}>Telefon Numarası</Text>
-          <TextInput
-            style={[styles.input, !isEditing && styles.disabledInput]}
-            value={phoneNumber}
-            editable={isEditing}
-            onChangeText={setPhoneNumber}
-            keyboardType="numeric"
-          />
-        </View>
-
-        <View style={styles.buttonsContainer}>
-          {isEditing ? (
-            <>
-              <View style={styles.buttonContainer}>
-                <Button title="Kaydet" onPress={handleSave} />
-              </View>
-              <View style={styles.buttonContainer}>
-                <Button title="Vazgeç" onPress={handleCancel} color="gray" />
-              </View>
-            </>
-          ) : (
-            <View style={styles.buttonContainer}>
-              <Button title="Düzenle" onPress={handleEdit} />
-            </View>
-          )}
-        </View>
-      </View>
-    </ScrollView>
+    <View style={styles.container}>
+      <Text style={styles.title}>Profilim</Text>
+      {loading ? (
+        <Text style={styles.loadingText}>Loading...</Text>
+      ) : (
+        <FlatList
+          data={profileArray}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.label}
+          contentContainerStyle={styles.flatListContainer}
+        />
+      )}
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  scrollView: {
-    flexGrow: 1,
-    justifyContent: 'center',
-    padding: 20,
-  },
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
     paddingHorizontal: 20,
     paddingVertical: 20,
   },
@@ -144,63 +87,38 @@ const styles = StyleSheet.create({
     fontSize: 24,
     marginBottom: 20,
     fontWeight: 'bold',
+    textAlign: 'center',
   },
   fieldContainer: {
     width: '100%',
     marginBottom: 15,
+    flexDirection: 'column',
     alignItems: 'flex-start',
+  },
+  labelContainer: {
+    marginBottom: 5,
   },
   label: {
     fontSize: 16,
-    marginBottom: 5,
     color: '#332',
   },
-  input: {
+  fieldBorder: {
     width: '100%',
-    height: 40,
     borderWidth: 1,
     borderColor: '#ccc',
     borderRadius: 5,
-    paddingHorizontal: 10,
+    padding: 10,
   },
-  disabledInput: {
-    backgroundColor: '#f0f0f0',
+  field: {
+    fontSize: 16,
+    color: '#000',
   },
-  photo: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    marginBottom: 10,
+  loadingText: {
+    fontSize: 18,
+    color: '#666',
   },
-  buttonsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
+  flatListContainer: {
     width: '100%',
-    marginTop: 20,
-  },
-  buttonContainer: {
-    width: '45%',
-  },
-  photoBorder: {
-    borderColor: '#000',
-  },
-  photo: {
-    width: '100%',
-    height: '100%',
-    borderRadius: 5,
-  },
-  noPhotoText: {
-    color: '#999',
-  },
-  photoContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 5,
-    width: 100,
-    height: 100,
-    marginBottom: 10,
   },
 });
 

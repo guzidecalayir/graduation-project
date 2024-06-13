@@ -82,7 +82,7 @@ class apiPhilanthropist{
             });
 
             
-            const responseText = await response.text();
+            const responseText = await response.json();
            
             
 
