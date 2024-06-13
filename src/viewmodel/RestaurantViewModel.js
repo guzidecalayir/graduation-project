@@ -28,7 +28,7 @@ class RestaurantViewModel{
             }
     
             console.log(restaurant);
-            await apiRestaurant.saveRestaurant(restaurant);
+             await apiRestaurant.saveRestaurant(restaurant);
         } catch (error) {
             console.error('Error:', error);
             throw error;
@@ -47,7 +47,8 @@ class RestaurantViewModel{
             };
             
             
-            await apiRestaurant.signInRestaurant(restaurant);
+            const token = await apiRestaurant.signInRestaurant(restaurant);
+            return token; 
             
         } catch (error) {
             

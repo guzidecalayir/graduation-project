@@ -20,8 +20,8 @@ class Student {
             email: this.email,
             password: this.password,
             phoneNumber: this.phoneNumber,
-            school : school,
-            birthDate : birthDate,
+            school : this.school,
+            birthDate : this.birthDate,
         };
     }
 

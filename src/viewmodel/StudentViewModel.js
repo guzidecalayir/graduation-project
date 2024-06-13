@@ -51,7 +51,8 @@ class StudentViewModel{
             };
             
             
-            await apiStudent.signInStudent(student);
+            const token = await apiStudent.signInStudent(student);
+            return token; 
             
         } catch (error) {
             

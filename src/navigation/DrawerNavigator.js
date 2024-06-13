@@ -54,11 +54,12 @@ console.log('Drawer:'+ userType)
         <Drawer.Screen
           key={index}
           name={screen.name}
-          component={screen.component}
           options={{
             drawerIcon: ({ color, size }) => screen.icon(color, size),
           }}
-        />
+        >
+          {props => <screen.component {...props} userType={userType} />}
+    </Drawer.Screen>
       ))}
       <Drawer.Screen
         name= "Çıkış Yap"

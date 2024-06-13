@@ -1,6 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { View, Text, TextInput, Button, Alert, StyleSheet, ScrollView, TouchableOpacity, Image } from 'react-native';
 import { launchImageLibrary } from 'react-native-image-picker';
+import { AuthContext } from '../context/AuthContext';
+import apiPhilanthropist from '../service/apiPhilanthropist';
+import apiMaps from '../service/apiMaps';
 
 const ProfileViewRestaurant = ({ navigation }) => {
   // These values should ideally be fetched from the backend
@@ -13,7 +16,31 @@ const ProfileViewRestaurant = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [isEditing, setIsEditing] = useState(false);
-  const [photo, setPhoto] = useState(null);
+ 
+  const { userToken } = useContext(AuthContext);  
+
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      try {
+        const response = await apiPhilanthropist.getProfile(userToken);
+        const { name, latitude, longitude, email, phoneNumber } = response.data;
+        setName(name);
+        const{city, district,neighbourhood,street,building} = await apiMaps.getAddress(latitude, longitude);
+        setCity(city);
+        setDistrict(district);
+        setNeighbourhood(neighbourhood);
+        setStreet(street);
+        setBuilding(building);
+        setEmail(email);
+        setPhoneNumber(phoneNumber);
+      } catch (error) {
+        console.error('Failed to fetch user profile:', error);
+        Alert.alert('Error', 'Failed to load user profile.');
+      }
+    };
+
+    fetchUserProfile();
+  }, [userToken]);
 
   const handleSave = () => {
     Alert.alert('Başarılı', 'Profilgüncellendi.');
@@ -29,32 +56,14 @@ const ProfileViewRestaurant = ({ navigation }) => {
     Alert.alert('Bilgi', 'Düzenleme iptal edildi.');
   };
 
-  const handleSelectPhoto = () => {
-    launchImageLibrary({ mediaType: 'photo' }, (response) => {
-      if (response.assets && response.assets.length > 0) {
-        setPhoto(response.assets[0].uri);
-      }
-    });
-  };
+  
 
   return (
     <ScrollView contentContainerStyle={styles.scrollView}>
       <View style={styles.container}>
         <Text style={styles.title}>Profilim</Text>
 
-        <View style={styles.fieldContainer}>
-          <Text style={styles.label}>Profil Fotoğrafım</Text>
-          <View style={[styles.photoContainer, photo && styles.photoBorder]}>
-            {photo ? (
-              <Image source={{ uri: photo }} style={styles.photo} />
-            ) : (
-              <Text style={styles.noPhotoText}>Fotoğraf Seçilmedi</Text>
-            )}
-          </View>
-          {isEditing && (
-            <Button title="Fotoğraf Seç" onPress={handleSelectPhoto} />
-          )}
-        </View>
+      
 
         <View style={styles.fieldContainer}>
           <Text style={styles.label}>Restoran Adı</Text>

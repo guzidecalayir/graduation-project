@@ -1,129 +1,76 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, Button, Alert, StyleSheet, ScrollView, Image } from 'react-native';
-import { launchImageLibrary } from 'react-native-image-picker';
-import { useRoute } from '@react-navigation/native';
+import React, { useEffect, useState, useContext } from 'react';
+import { View, Text, StyleSheet, FlatList } from 'react-native';
+import { AuthContext } from '../context/AuthContext';
 
 const ProfileViewStudent = ({ navigation }) => {
-  const route = useRoute();
-  // const { responseData } = route.params;
-  
-  const [name, setName] = useState('');
-  const [surname, setSurname] = useState('');
-  const [email, setEmail] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [isEditing, setIsEditing] = useState(false);
-  
+  const { userProfile } = useContext(AuthContext);
 
-  // useEffect(() => {
-  //   if (responseData) {
-  //     setName(responseData.name);
-  //     setSurname(responseData.surname);
-  //     setEmail(responseData.email);
-  //     setPhoneNumber(responseData.phoneNumber);
-  //   }
-  // }, [responseData]);
+  const [profileData, setProfileData] = useState({});
+  const [loading, setLoading] = useState(true);
 
-  const handleSave = () => {
-    Alert.alert('Başarılı', 'Profil başarıyla güncellendi.');
-    setIsEditing(false);
-  };
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        if (userProfile && userProfile!== null && userProfile!== undefined) {
+          
+          setProfileData({
+            firstName: userProfile.firstName,
+            lastName: userProfile.lastName,
+            phoneNumber: userProfile.phoneNumber,
+            email: userProfile.email,
+          });
+          console.log('Fetched profile data:', userProfile);
+        }
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const handleEdit = () => {
-    setIsEditing(true);
-  };
+    fetchData();
+  }, [userProfile, setProfileData]);
 
-  const handleCancel = () => {
-    setIsEditing(false);
-    Alert.alert('Bilgi', 'Düzenleme iptal edildi.');
-  };
+  // Map the profileData to an array for FlatList
+  const profileArray = [
+    { label: 'Ad', value: profileData.firstName || 'N/A' },
+    { label: 'Soyad', value: profileData.lastName || 'N/A' },
+    { label: 'Email', value: profileData.email || 'N/A' },
+    { label: 'Telefon Numarası', value: profileData.phoneNumber || 'N/A' },
+  ];
 
-  const handleSelectPhoto = () => {
-    // launchImageLibrary({ mediaType: 'photo' }, (response) => {
-    //   if (response.assets && response.assets.length > 0) {
-    //     setPhoto(response.assets[0].uri);
-    //   }
-    // });
-  };
-  
+  const renderItem = ({ item }) => (
+    <View style={styles.fieldContainer}>
+      <View style={styles.labelContainer}>
+        <Text style={styles.label}>{item.label}</Text>
+      </View>
+      <View style={styles.fieldBorder}>
+        <Text style={styles.field}>{item.value}</Text>
+      </View>
+    </View>
+  );
 
   return (
-    <ScrollView contentContainerStyle={styles.scrollView}>
-      <View style={styles.container}>
-        <Text style={styles.title}>Profilim</Text>
+    <View style={styles.container}>
+      <Text style={styles.title}>Profilim</Text>
 
-        <View style={styles.fieldContainer}>
-          <Text style={styles.label}>Ad</Text>
-          <TextInput
-            style={[styles.input, !isEditing && styles.disabledInput]}
-            value={name}
-            editable={isEditing}
-            onChangeText={(text) => setName(text)}
-          />
-        </View>
-
-        <View style={styles.fieldContainer}>
-          <Text style={styles.label}>Soyad</Text>
-          <TextInput
-            style={[styles.input, !isEditing && styles.disabledInput]}
-            value={surname}
-            editable={isEditing}
-            onChangeText={(text) => setSurname(text)}
-          />
-        </View>
-
-        <View style={styles.fieldContainer}>
-          <Text style={styles.label}>Email</Text>
-          <TextInput
-            style={[styles.input, !isEditing && styles.disabledInput]}
-            value={email}
-            editable={isEditing}
-            onChangeText={(text) => setEmail(text)}
-            keyboardType="email-address"
-          />
-        </View>
-
-        <View style={styles.fieldContainer}>
-          <Text style={styles.label}>Telefon Numarası</Text>
-          <TextInput
-            style={[styles.input, !isEditing && styles.disabledInput]}
-            value={phoneNumber}
-            editable={isEditing}
-            onChangeText={(text) => setPhoneNumber(text)}
-            keyboardType="numeric"
-          />
-        </View>
-
-        <View style={styles.buttonsContainer}>
-          {isEditing ? (
-            <>
-              <View style={styles.buttonContainer}>
-                <Button title="Kaydet" onPress={handleSave} />
-              </View>
-              <View style={styles.buttonContainer}>
-                <Button title="Vazgeç" onPress={handleCancel} color="gray" />
-              </View>
-            </>
-          ) : (
-            <View style={styles.buttonContainer}>
-              <Button title="Düzenle" onPress={handleEdit} />
-            </View>
-          )}
-        </View>
-      </View>
-    </ScrollView>
+      {loading ? (
+        <Text style={styles.loadingText}>Loading...</Text>
+      ) : (
+        <FlatList
+          data={profileArray}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.label}
+          contentContainerStyle={styles.flatListContainer}
+        />
+      )}
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  scrollView: {
-    flexGrow: 1,
-    justifyContent: 'center',
-    padding: 20,
-  },
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
     paddingHorizontal: 20,
     paddingVertical: 20,
   },
@@ -131,65 +78,39 @@ const styles = StyleSheet.create({
     fontSize: 24,
     marginBottom: 20,
     fontWeight: 'bold',
+    textAlign: 'center',
   },
   fieldContainer: {
     width: '100%',
     marginBottom: 15,
+    flexDirection: 'column',
     alignItems: 'flex-start',
+  },
+  labelContainer: {
+    marginBottom: 5,
   },
   label: {
     fontSize: 16,
-    marginBottom: 5,
     color: '#332',
   },
-  input: {
+  fieldBorder: {
     width: '100%',
-    height: 40,
     borderWidth: 1,
     borderColor: '#ccc',
     borderRadius: 5,
-    paddingHorizontal: 10,
+    padding: 10,
   },
-  disabledInput: {
-    backgroundColor: '#f0f0f0',
+  field: {
+    fontSize: 16,
+    color: '#000',
   },
-  photo: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    marginBottom: 10,
+  loadingText: {
+    fontSize: 18,
+    color: '#666',
   },
-  buttonsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
+  flatListContainer: {
     width: '100%',
-    marginTop: 20,
-  },
-  buttonContainer: {
-    width: '45%',
-  },
-  photoContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 5,
-    width: 100,
-    height: 100,
-    marginBottom: 10,
-  },
-  photoBorder: {
-    borderColor: '#000',
-  },
-  photo: {
-    width: '100%',
-    height: '100%',
-    borderRadius: 5,
-  },
-  noPhotoText: {
-    color: '#999',
   },
 });
-
 
 export default ProfileViewStudent;

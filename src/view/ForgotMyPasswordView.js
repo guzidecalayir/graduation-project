@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, TextInput, Button, Alert } from 'react-native';
+import apiJoint from '../service/apiJoint';
 
 const ForgotMyPasswordView = () => {
   const [email, setEmail] = useState('');
@@ -8,30 +9,48 @@ const ForgotMyPasswordView = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [isCodeSent, setIsCodeSent] = useState(false);
 
-  // Function to handle sending code
-  const handleSendCode = () => {
-    // You can implement code sending logic here
-    // For example, sending a request to the server to send the code to the email provided
-    // Upon successful sending, set isCodeSent to true
-    setIsCodeSent(true);
-    Alert.alert('Kod Gönderildi', 'Sıfırlama kodu emailinize gönderildi.');
-  };
+  
+  const handleSendCode = async() => {
+    try {
+        const data = {
+          email:email,
+        }
+        await apiJoint.sendCode(data);
+        setIsCodeSent(true);
+    } catch (error) {
+        console.error('Error sending code:', error);
+        Alert.alert('Error', 'Failed to send code.');
+    }
+};
 
-  // Function to handle password reset
-  const handleResetPassword = () => {
+  
+  const handleResetPassword = async() => {
     if (!code || !newPassword || !confirmPassword) {
-        Alert.alert('HAta', 'Lütfen tüm alanları doldurun.');
+        Alert.alert('Hata', 'Lütfen tüm alanları doldurun.');
         return;
       }
-    // Check if passwords match
+    
     if (newPassword !== confirmPassword) {
       Alert.alert('Hata', 'Şifreler eşleşmiyor.');
       return;
     }
+    try {
+      const data = {
+        email:email,
+        password:newPassword,
+        verificationCode:code,
+      }
+      await apiJoint.sendInfo(data);
+      setEmail('');
+      setNewPassword('');
+      setConfirmPassword('');
+      setCode('');     
+  } catch (error) {
+      console.error('Error sending code:', error);
+      Alert.alert('Error', 'Failed to send code.');
+  }
 
-    // You can implement password reset logic here
-    // For example, sending a request to the server to verify the code and update the password
-    Alert.alert('Bİlgi', 'Şifreniz başarıyla değiştiildi.');
+    
   };
 
   return (
@@ -44,12 +63,17 @@ const ForgotMyPasswordView = () => {
             value={email}
             onChangeText={setEmail}
             placeholder="Email Addresi"
-            keyboardType="email-address"
           />
           <Button title="Kod Gönder" onPress={handleSendCode} />
         </>
       ) : (
         <>
+        <TextInput
+            style={styles.input}
+            value={email}
+            onChangeText={setEmail}
+            placeholder="Email Adresi"
+          />
           <TextInput
             style={styles.input}
             value={code}
