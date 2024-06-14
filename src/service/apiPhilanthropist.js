@@ -1,7 +1,7 @@
 import PhilanthropistViewModel from "../viewmodel/PhilanthropistViewModel";
 
 class apiPhilanthropist{
-
+   
     static async savePhilanthropist(data) {
         try {
             console.log('JSON data to be sent:', JSON.stringify(data));

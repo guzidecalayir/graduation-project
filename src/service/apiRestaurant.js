@@ -100,6 +100,76 @@ class apiRestaurant{
           throw error;
         }
       };
+      static async uploadRestaurantPhoto  (photo,userToken) {
+        if (photo) {
+          const formData = new FormData();
+          formData.append('file', {
+            uri: photo.uri,
+            type: 'image/jpeg',
+            name: 'photo.jpg',
+          });
+      
+          const options = {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'multipart/form-data',
+              'Authorization': `Bearer ${userToken}`,
+            },
+            body: formData,
+          };
+      
+          try {
+            const response = await fetch(apiRestaurant.uploadRestaurantPhoto, options);
+            const result = await response.json();
+      
+            if (result.success) {
+              Alert.alert('Success', 'Photo uploaded successfully!');
+              console.log('Response:', result.data);
+              setPhoto(null); // Clear the selected photo
+            } else {
+              Alert.alert('Upload Failed', result.message);
+              console.log('Error:', result.message);
+            }
+          } catch (error) {
+            console.error('Error uploading photo:', error);
+            Alert.alert('Error', 'An error occurred while uploading the photo.');
+          }
+        } else {
+          Alert.alert('No photo selected', 'Please select a photo to upload.');
+        }
+      };
+      // apiService.js
+
+
+
+      static async addMenuItem(menuItem, userToken) {
+        try {
+          const response = await fetch('https://studentdesk.azurewebsites.net/api/Restaurant/menu/item', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${userToken}`,
+            },
+            body: JSON.stringify(menuItem),
+          });
+      
+          if (!response.ok) {
+            if (response.status === 401) {
+              // Handle unauthorized error
+            } else if (response.status === 404) {
+              // Handle not found error
+            } else {
+              // Handle other errors
+            }
+          }
+      
+          return await response.json();
+        } catch (error) {
+          console.error( error);
+          // Handle the error
+        }
+      };
+
 
 
 }

@@ -35,15 +35,27 @@ class apiMaps {
 
       if (response.data.status === 'OK') {
         const addressComponents = response.data.results[0].address_components;
-        const address = {
-          city: addressComponents.find(component => component.types.includes('locality'))?.long_name || '',
-          district: addressComponents.find(component => component.types.includes('administrative_area_level_2'))?.long_name || '',
-          neighbourhood: addressComponents.find(component => component.types.includes('sublocality'))?.long_name || '',
-          building: addressComponents.find(component => component.types.includes('street_number'))?.long_name || '',
-          street: addressComponents.find(component => component.types.includes('route'))?.long_name || '',
-          // Add more components as needed (e.g., district, neighborhood, etc.)
-        };
-        return address;
+        console.log('Address components:', addressComponents);
+
+        const address = {};
+      addressComponents.forEach((component) => {
+        console.log('Component types:', component.types);
+        if (component.types.includes('street_number')) {
+          address.building = component.long_name;
+        } else if (component.types.includes('route')) {
+          address.street = component.long_name;
+        } else if (component.types.includes('administrative_area_level_2')) {
+          address.district = component.long_name;
+        } else if (component.types.includes('administrative_area_level_1')) {
+          address.city = component.long_name;
+        } else if (component.types.includes('administrative_area_level_4') || component.types.includes('sublocality') || component.types.includes('neighborhood')) {
+          address.neighbourhood = component.long_name;
+        }
+      });
+  
+
+      console.log('Parsed address:', address);
+      return address;
       } else {
         Alert.alert('Error', 'Coordinates not found. Please check again.');
         return null;

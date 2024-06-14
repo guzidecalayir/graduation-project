@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ImageBackground, ScrollView, TextInput } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ImageBackground, ScrollView } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import RestaurantView from './RestaurantView';
 
@@ -22,11 +22,12 @@ const HomeScreenView = ({ navigation }) => {
     category.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  
   const renderFoodCategory = (category) => (
     <TouchableOpacity
       key={category.id}
       style={styles.categoryContainer}
-      onPress={() => navigation.navigate('Restaurant', { RestaurantView })}
+      onPress={() => navigation.navigate('Restoranlar', {RestaurantView})}
     >
       <ImageBackground source={category.image} style={styles.categoryImage}>
         <Text style={styles.categoryTitle}>{category.title}</Text>
@@ -36,19 +37,13 @@ const HomeScreenView = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.searchBarContainer}>
-      <AntDesign name="search1" size={24} color="black" />
-        <TextInput
-          style={styles.searchBar}
-          placeholder="Restoran Konumu Bul"
-          value={searchQuery}
-          onChangeText={setSearchQuery}
-        />
-      </View>
+      
+
       <View style={styles.welcomeContainer}>
         <Text style={styles.title}>Hoş Geldiniz!</Text>
         <Text style={styles.subtitle}>Leziz Kategorileri Keşfedin!</Text>
       </View>
+
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.categoriesContainer}>
           {filteredCategories.map((category) => renderFoodCategory(category))}
@@ -65,7 +60,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingTop: 20,
   },
-  searchBarContainer: {
+  searchButton: {
     flexDirection: 'row',
     alignItems: 'center',
     borderColor: '#ddd',
@@ -73,14 +68,13 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginBottom: 20,
     paddingHorizontal: 10,
+    paddingVertical: 12,
+    justifyContent: 'center',
   },
-  searchIcon: {
-    marginRight: 10,
-  },
-  searchBar: {
-    flex: 1,
-    height: 40,
-    marginLeft:10,
+  searchButtonText: {
+    marginLeft: 10,
+    fontSize: 16,
+    color: '#333',
   },
   welcomeContainer: {
     borderWidth: 1,

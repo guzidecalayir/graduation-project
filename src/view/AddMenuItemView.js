@@ -1,50 +1,46 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, Button, Alert, StyleSheet, ScrollView, Image, Dimensions, TouchableOpacity } from 'react-native';
-import { launchImageLibrary } from 'react-native-image-picker';
+import React, { useState, useContext } from 'react';
+import { View, Text, TextInput, Button, Alert, StyleSheet, ScrollView, Image, Dimensions } from 'react-native';
+import apiRestaurant from '../service/apiRestaurant'; // Import your API service
+import { AuthContext } from '../context/AuthContext';
 
-const { width, height } = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 
 const AddMenuItemView = () => {
-  const [menuItems, setMenuItems] = useState([]);
+  const { userToken } = useContext(AuthContext);
+  
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState('');
-  const [image, setImage] = useState(null);
 
-  const handleAddMenuItem = () => {
-    if (!name || !description || !price || !image) {
+  const handleAddMenuItem = async () => {
+    if (!name || !description || !price) {
       Alert.alert('Hata', 'Tüm alanların doldurulması zorunludur.');
       return;
     }
-
-    const newItem = {
-      id: Math.random().toString(),
-      name,
-      description,
-      price,
-      image,
+    const isFormValid = () => {
+      return name !== '' && description !== '' && price !== '';
     };
-
-    setMenuItems([...menuItems, newItem]);
-    setName('');
-    setDescription('');
-    setPrice('');
-    setImage(null);
-
-    Alert.alert('Başarılı', 'Ürün başarıyla menüye eklendi.');
-  };
-
-  const handleSelectImage = () => {
-    launchImageLibrary({ mediaType: 'photo' }, (response) => {
-      if (response.assets && response.assets.length > 0) {
-        setImage(response.assets[0].uri);
+    const newItem = {
+      name:name,
+      description:description,
+      price: parseFloat(price),
+    };
+    
+    if (isFormValid()) {
+      try {
+        await apiRestaurant.addMenuItem(newItem, userToken);
+    
+        setName('');
+        setDescription('');
+        setPrice('');
+    
+        Alert.alert('Başarılı', 'Ürün başarıyla menüye eklendi.');
+      } catch (error) {
+        Alert.alert('Hata', 'Ürün eklenirken bir hata oluştu. Lütfen tekrar deneyiniz.');
       }
-    });
-  };
-
-  const handleDeleteMenuItem = (id) => {
-    setMenuItems(menuItems.filter(item => item.id !== id));
-    Alert.alert('Başarılı', 'Ürün başarıyla menüden çıkarıldı.');
+    } else {
+      Alert.alert('Hata', 'Lütfen tüm alanları doldurun.');
+    }
   };
 
   return (
@@ -73,40 +69,15 @@ const AddMenuItemView = () => {
             onChangeText={setPrice}
             keyboardType="numeric"
           />
-
-          <View style={styles.inputContainer}>
-            <TouchableOpacity style={styles.inputButton} onPress={handleSelectImage}>
-              <Text style={styles.inputButtonText}>Fotoğraf Seç</Text>
-            </TouchableOpacity>
-          </View>
         </View>
 
         <View style={styles.buttonsContainer}>
           <View style={[styles.buttonContainer, { width: width * 0.4 }]}>
             <Button title="Menüye Ekle" onPress={handleAddMenuItem} />
           </View>
-          
         </View>
 
-        <View style={styles.menuItemsContainer}>
-          {menuItems.map((item) => (
-            <View key={item.id} style={styles.menuItem}>
-              <Image source={{ uri: item.image }} style={styles.menuItemImage} />
-              <View style={styles.menuItemDetails}>
-                <Text style={styles.menuItemName}>{item.name}</Text>
-                <Text style={styles.menuItemDescription}>{item.description}</Text>
-                <Text style={styles.menuItemPrice}>{item.price}</Text>
-                <View style={[styles.buttonContainer, { width: width * 0.4 }]}>
-            <Button
-              title="Menüden Çıkar"
-              onPress={() => handleDeleteMenuItem(item.id)}
-              color="red"
-            />
-          </View>
-              </View>
-            </View>
-          ))}
-        </View>
+        {/* Removed menuItemsContainer section */}
       </View>
     </ScrollView>
   );
@@ -139,17 +110,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     marginBottom: 10,
   },
-  imageContainer: {
-    width: '100%',
-    marginBottom: 20,
-    alignItems: 'center',
-  },
-  image: {
-    width: 100,
-    height: 100,
-    borderRadius: 10,
-    marginBottom: 10,
-  },
   buttonsContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
@@ -163,66 +123,9 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     margin: 5,
   },
-  menuItemsContainer: {
-    width: '100%',
-    marginTop: 20,
-  },
-  menuItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 20,
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 10,
-    padding: 10,
-    backgroundColor: '#fff',
-  },
-  menuItemImage: {
-    width: 60,
-    height: 60,
-    borderRadius: 10,
-    marginRight: 10,
-  },
-  menuItemDetails: {
-    flex: 1,
-  },
-  menuItemName: {
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  menuItemDescription: {
-    fontSize: 14,
-    color: '#666',
-  },
-  menuItemPrice: {
-    fontSize: 16,
-    color: '#333',
-  },
   outerView: {
     width: '100%', 
     alignItems: 'flex-start',
-  },
-  inputContainer: {
-    width: '100%',
-    marginBottom: 15,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  label: {
-    fontSize: 16,
-    marginBottom: 5,
-    color: '#332',
-    marginRight: 10,
-  },
-  inputButton: {
-    backgroundColor: '#ccc',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 5,
-  },
-  inputButtonText: {
-    fontSize: 16,
-    color: 'black',
   },
 });
 

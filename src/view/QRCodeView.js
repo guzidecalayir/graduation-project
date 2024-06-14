@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, StatusBar } from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
+import { AuthContext } from '../context/AuthContext';
 
 export default function App() {
   const [hasPermission, setHasPermission] = useState(false);
-  const [scanData, setScanData] = useState();
+  const [scanData, setScanData] = useState(null);
+  const { userToken } = useContext(AuthContext);
 
   useEffect(() => {
     (async () => {
@@ -21,17 +23,41 @@ export default function App() {
     );
   }
 
-  const handleBarCodeScanned = ({ type, data }) => {
+  const handleBarCodeScanned = async ({ type, data }) => {
+    console.log('Data:', data); // Check if data is being passed correctly
     alert(`QR kod tarandı.`);
     setScanData(data);
     console.log(`Data: ${data}`);
+    const scannData = {
+      inti: data,
+    };
+    await decrease(scannData, userToken);
   };
+  const decrease = async (scannData, userToken) => {
+    try {
+      console.log(scannData)
+      const response = await fetch('https://studentdesk.azurewebsites.net/api/Student/order', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${userToken}`,
+        },
+        body: JSON.stringify(scannData), // Pass data as an object
+      });
+  
+      //...
+    } catch (error) {
+      console.error(error);
+      // Handle the error
+    }
+  };
+  
 
   return (
     <View style={styles.container}>
       <BarCodeScanner
         style={StyleSheet.absoluteFillObject}
-        onBarCodeScanned={scanData? undefined : handleBarCodeScanned}
+        onBarCodeScanned={scanData ? undefined : handleBarCodeScanned}
       />
       {scanData && (
         <View style={styles.bottomView}>

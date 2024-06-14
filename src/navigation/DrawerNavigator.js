@@ -9,6 +9,8 @@ import DemandView from '../view/DemandView';
 import QRCodeView from '../view/QRCodeView';
 import HomeStack from './HomeStack';
 import PaymentView from '../view/PaymentView';
+import RestaurantPhotoView from '../view/RestaurantPhotoView';
+import PriceandScoreView from '../view/PriceandScoreView';
 import { Entypo } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
@@ -35,6 +37,9 @@ const drawerScreensConfig = {
     { name: "Ana Sayfa", component: HomeStack, icon: (color, size) => <Ionicons name="restaurant" size={size} color={color} /> },
     { name: "Talepler", component: DemandView, icon: (color, size) => <FontAwesome name="list-alt" size={size} color={color} /> },
     { name: "Menü Güncelle", component: AddMenuItemView, icon: (color, size) => <Entypo name="add-to-list" size={size} color={color} /> },
+    { name: "Fiyat Kapasite Güncelle", component: PriceandScoreView, icon: (color, size) => <MaterialIcons name="currency-exchange" size={size} color={color} /> },
+    //{ name: "Restoran Fotoğrafı Ekle", component: RestaurantPhotoView, icon: (color, size) => <MaterialIcons name="add-a-photo" size={size} color={color} /> },
+  
   ],
 };
 
